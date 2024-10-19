@@ -113,7 +113,7 @@ def preprocess_female_diabetes():
     # Get the path from an environment variable
 
     # Read the CSV file
-    Diabetes_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/master/server/dfw.csv')
+    Diabetes_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/main/server/dfw.csv')
     print("Current working directory:", Diabetes_DS)
     # Replace 0 values with NaN for relevant columns
     Diabetes_DS[['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']] = Diabetes_DS[['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']].replace(0, np.nan)
@@ -232,7 +232,7 @@ def predict():
 # Load and preprocess dataset for male diabetes detection
 def preprocess_male_diabetes():
     global Diabetes_DS_male, poly, scaler_male, lr, X_male
-    Diabetes_DS_male = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/master/server/dfm.csv')
+    Diabetes_DS_male = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/main/server/dfm.csv')
     Diabetes_DS_male = pd.get_dummies(Diabetes_DS_male, drop_first=True)
     X_male = Diabetes_DS_male.drop(['Diabetes'], axis=1)
     y_male = Diabetes_DS_male['Diabetes']
@@ -273,7 +273,7 @@ proba_have_heart_disease = None
 def Heart_Disease_Detection(input_data_):
     global proba_have_heart_disease
     # Load the dataset
-    data = pd.read_csv(('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/master/server/diseaseheart/heart_disease_data.csv'))
+    data = pd.read_csv(('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/main/server/diseaseheart/heart_disease_data.csv'))
     print(data.columns)
     # Ensure the dataset includes all 14 fields
     expected_columns = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
@@ -369,7 +369,7 @@ scaler_liver = None
 def train_liver_model():
     global gbm_model_liver, scaler_liver
     # Load the dataset
-    Liver_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/master/server/liver/Liver_disease_data.csv')
+    Liver_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/main/server/liver/Liver_disease_data.csv')
     # Prepare features and target variable
     X = Liver_DS.drop(columns='Diagnosis', axis=1)
     Y = Liver_DS['Diagnosis']   
