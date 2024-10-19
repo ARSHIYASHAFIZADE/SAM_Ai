@@ -37,7 +37,26 @@ from sklearn.datasets import load_breast_cancer
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-app = Flask(__name__)
+from flask import Flask, send_from_directory
+import os
+
+app = Flask(__name__, static_folder='frontend/build', static_url_path='')
+
+# Serve React frontend
+@app.route('/')
+def serve_frontend():
+    return send_from_directory(app.static_folder, 'index.html')
+
+# Ensure other routes like /predict_diabetes are also working
+@app.route('/predict_diabetes', methods=['POST'])
+def predict_diabetes():
+    # Your existing prediction logic
+    pass
+
+# Fallback route for React Router to handle routing
+@app.errorhandler(404)
+def not_found(e):
+    return send_from_directory(app.static_folder, 'index.html')
 CORS(app, supports_credentials=True )
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
@@ -94,7 +113,7 @@ def preprocess_female_diabetes():
     # Get the path from an environment variable
 
     # Read the CSV file
-    Diabetes_DS = pd.read_csv('dfw.csv')
+    Diabetes_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/master/server/dfw.csv')
     print("Current working directory:", Diabetes_DS)
     # Replace 0 values with NaN for relevant columns
     Diabetes_DS[['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']] = Diabetes_DS[['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']].replace(0, np.nan)
@@ -213,7 +232,7 @@ def predict():
 # Load and preprocess dataset for male diabetes detection
 def preprocess_male_diabetes():
     global Diabetes_DS_male, poly, scaler_male, lr, X_male
-    Diabetes_DS_male = pd.read_csv('dfm.csv')
+    Diabetes_DS_male = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/master/server/dfm.csv')
     Diabetes_DS_male = pd.get_dummies(Diabetes_DS_male, drop_first=True)
     X_male = Diabetes_DS_male.drop(['Diabetes'], axis=1)
     y_male = Diabetes_DS_male['Diabetes']
@@ -254,7 +273,7 @@ proba_have_heart_disease = None
 def Heart_Disease_Detection(input_data_):
     global proba_have_heart_disease
     # Load the dataset
-    data = pd.read_csv(('diseaseheart/heart_disease_data.csv'))
+    data = pd.read_csv(('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/master/server/diseaseheart/heart_disease_data.csv'))
     print(data.columns)
     # Ensure the dataset includes all 14 fields
     expected_columns = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
@@ -350,7 +369,7 @@ scaler_liver = None
 def train_liver_model():
     global gbm_model_liver, scaler_liver
     # Load the dataset
-    Liver_DS = pd.read_csv('liver/Liver_disease_data.csv')
+    Liver_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/master/server/liver/Liver_disease_data.csv')
     # Prepare features and target variable
     X = Liver_DS.drop(columns='Diagnosis', axis=1)
     Y = Liver_DS['Diagnosis']   
@@ -634,5 +653,6 @@ def detect_breast_cancer():
         print(f"Exception occurred: {e}")
         return jsonify({"error": str(e)}), 400
 
-if __name__=="__main__":
-    app.run()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 10000)))
+
