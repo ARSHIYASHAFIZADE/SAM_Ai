@@ -40,23 +40,13 @@ logger = logging.getLogger(__name__)
 from flask import Flask, send_from_directory
 import os
 
-app = Flask(__name__, static_folder='frontend/build', static_url_path='')
+app = Flask(__name__)
 
 # Serve React frontend
 @app.route('/')
 def serve_frontend():
     return send_from_directory(app.static_folder, 'index.html')
-
-# Ensure other routes like /predict_diabetes are also working
-@app.route('/predict_diabetes', methods=['POST'])
-def predict_diabetes():
-    # Your existing prediction logic
-    pass
-
-# Fallback route for React Router to handle routing
-@app.errorhandler(404)
-def not_found(e):
-    return send_from_directory(app.static_folder, 'index.html')
+    
 CORS(app, supports_credentials=True )
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
@@ -654,5 +644,5 @@ def detect_breast_cancer():
         return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 10000)))
+    app.run(app.debug = True)
 
