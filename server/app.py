@@ -273,7 +273,7 @@ proba_have_heart_disease = None
 def Heart_Disease_Detection(input_data_):
     global proba_have_heart_disease
     # Load the dataset
-    data = pd.read_csv(('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/main/server/diseaseheart/heart_disease_data.csv'))
+    data = pd.read_csv(('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM_Ai/refs/heads/main/server/diseaseheart/heart_disease_data.csv'))
     print(data.columns)
     # Ensure the dataset includes all 14 fields
     expected_columns = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
