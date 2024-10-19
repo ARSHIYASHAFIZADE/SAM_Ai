@@ -369,7 +369,7 @@ scaler_liver = None
 def train_liver_model():
     global gbm_model_liver, scaler_liver
     # Load the dataset
-    Liver_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/refs/heads/main/server/liver/Liver_disease_data.csv')
+    Liver_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM_Ai/refs/heads/main/server/liver/Liver_disease_data.csv')
     # Prepare features and target variable
     X = Liver_DS.drop(columns='Diagnosis', axis=1)
     Y = Liver_DS['Diagnosis']   
