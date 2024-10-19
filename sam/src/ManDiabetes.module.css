@@ -1,0 +1,129 @@
+/* Font-face remains the same */
+
+.formWrapper {
+    margin-top: 90px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    transition: filter 0.3s ease;
+}
+
+.blur {
+    filter: blur(5px);
+}
+
+.container {
+    width: 90%;
+    max-width: 700px;
+    background-color: #1f1f1f; /* Dark background color */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Darker shadow */
+    padding: 30px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 1s ease-out; /* Add fade-in animation */
+}
+
+.resultCard {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333; /* Darker background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Darker shadow */
+    z-index: 1000;
+    text-align: center;
+    animation: fadeIn 1s ease-out;
+}
+
+.cancelBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cancelBtn:hover {
+    background-color: #ff4c4c;
+    transform: scale(1.05); /* Slightly scale up */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.formGroup {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    margin-bottom: 10px;
+    color: #90caf9; /* Light blue color for labels */
+    font-weight: bold;
+}
+
+.formGroup input,
+.formGroup select {
+    padding: 10px;
+    border: 1px solid #2196f3;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: #2c2c2c; /* Dark background for inputs */
+    color: #e0e0e0; /* Light text color */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+    animation: pulse 1s ease-out infinite; /* Pulse effect on focus */
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 12px rgba(33, 150, 243, 0.7);
+    }
+    100% {
+        box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+    }
+}
+
+.submitBtn {
+    border-radius: 10px;
+    color: white;
+    background-color: #2196f3; /* Blue background */
+    border: none;
+    font-size: 1em;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.submitBtn:hover {
+    background-color: #1976d2; /* Darker blue */
+    transform: scale(1.05); /* Slightly scale up */
+}
+
+.pr {
+    color: white; /* Text color in the form */
+}

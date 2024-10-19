@@ -1,0 +1,401 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  color:#ffffff;
+}
+main {
+  padding: 20px;
+  margin-top: 80px;
+}
+
+.home-section {
+  background: linear-gradient(135deg, #0026ff38, #e52e7159);
+  color: rgb(245, 245, 245);
+  padding: 100px 20px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.home-content h1 {
+  font-size: 3em;
+  margin: 0;
+  color: rgb(245, 245, 245);
+}
+
+.home-content p {
+  font-size: 1.2em;
+}
+
+.features-section, .about-section, .contact-section {
+  color: #ffffff;
+  padding: 60px 20px;
+}
+
+.features-section h2, .about-section h2, .contact-section h2 {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.features-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.feature-card {
+  background: linear-gradient(135deg, #040748, #5173f9c0);
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 4px 18px rgba(0, 0, 0, 0.477), -2px -4px 18px rgba(0, 0, 0, 0.482);
+  width: 250px;
+  text-align: center;
+  transition: background-color 0.5s ease, background 0.5s ease;
+}
+
+.feature-card h3 {
+  margin-top: 0;
+  text-shadow: 3px 3px 11px rgba(0, 0, 0, 0.333), -3px -3px 11px rgba(0, 0, 0, 0.316);
+}
+
+.feature-card p {
+  text-shadow: 3px 3px 11px rgb(0, 0, 0), -3px -3px 11px rgba(0, rgb(0, 0, 0));
+}
+
+.feature-card img {
+  max-width: 220px;
+  min-height: 200px;
+  border-radius: 10px;
+  box-shadow: 3px 3px 11px rgba(0, 0, 0, 0.333), -3px -3px 11px rgba(0, 0, 0, 0.316);
+}
+
+.feature-card:hover {
+  background: linear-gradient(135deg, #120101, #0e288ec0);
+  background-size: 400% 400%;
+  animation: gradientAnimation 5s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.about-content {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.about-card {
+  background: #1d174d;
+  width: 250px;
+  height: 300px;
+  perspective: 1000px;
+  margin: 0 auto;
+  position: relative;
+  transition: transform 0.6s;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.616);
+}
+
+.about-card .card-front, .about-card .card-back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: transform 0.7s;
+}
+
+.about-card .card-front {
+  background: #1d174d;
+  transform: rotateY(0);
+}
+
+.about-card .card-back {
+  background: #18123d;
+  transform: rotateY(180deg);
+}
+
+.about-card:hover .card-front {
+  transform: rotateY(180deg);
+}
+.about-card:hover .card-back {
+  transform: rotateY(0);
+}
+
+.about-card img {
+  width: 100%;
+  height: 100%;
+  object-fit:cover;
+  border-radius: 10px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.236), -2px -4px 8px rgba(0, 0, 0, 0.586);
+}
+
+#samvid1 {
+  width: 250px;
+  text-align: center;
+  border-radius: 10px;
+}
+#intro-vid-text{
+  text-align: center;
+  color: #ffffff;
+}
+
+.features-video {
+  height: 400px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 20px; 
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.feature-video-card {
+  height: 100%; 
+  width: 100%; 
+  max-width: 600px; 
+  max-height: 400px; 
+  border: 2px solid #ffffff; 
+  border-radius: 10px; 
+  overflow: hidden; 
+  position: relative; 
+  border: none;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.675);
+}
+
+.feature-video-card video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 400px;
+  min-width: 600px;
+  object-fit: cover; /* Cover the card while maintaining aspect ratio */
+}
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #5639d7a8;
+  color: white;
+}
+
+.about-card .card-front:hover {
+  filter: brightness(80%);
+}
+
+/* App.css */
+.navbar-nav .nav-item a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit; /* Inherit color from parent */
+}
+
+.navbar-nav .nav-item a .fa {
+  margin-right: 10px; 
+}
+
+
+.social-links a {
+  color: #270ae5;
+  margin: 0 10px;
+  font-size: 1.5em;
+}
+
+.social-links a:hover {
+  color: #6200ea;
+}
+#contact-header {
+  text-align: center;
+  color: #ffffff70;
+}
+
+
+/* About.css */
+
+.about-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.about-intro h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.about-intro p {
+  font-size: 1.1em;
+  color: #ffffff;
+}
+
+.ai-applications, .ai-advantages, .additional-info {
+  margin-top: 30px;
+}
+
+.ai-applications h2, .ai-advantages h2, .additional-info h2 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color:#ffffff;
+}
+
+.ai-applications ul, .ai-advantages ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.ai-applications li, .ai-advantages li {
+  margin-bottom: 10px;
+}
+
+.additional-info p {
+  font-size: 1.1em;
+  color: #ffffff;
+}
+
+#space{
+  border:none;
+  border-top: 4px solid rgb(9, 9, 107);
+}
+
+
+
+
+/* Header Styles */
+.App-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  color: white;
+  z-index: 1000;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s, transform 0.3s;
+}
+
+.App-header:hover {
+  transform: translateY(-5px);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-item {
+  list-style: none;
+}
+
+.nav-item a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  position: relative;
+  padding: 0.5rem;
+  transition: color 0.3s;
+}
+
+.nav-item a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0), rgba(0, 255, 255, 1), rgba(0, 255, 255, 0));
+  transition: transform 0.3s;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+}
+
+.nav-item a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Footer Styles */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: background 0.3s, transform 0.3s;
+}
+
+footer:hover {
+  transform: translateY(5px);
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+@keyframes glow {
+  0% {
+      text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  }
+  50% {
+      text-shadow: 0 0 15px rgba(0, 255, 255, 1);
+  }
+  100% {
+      text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  }
+}
+
+/* Applying animation to header and footer */
+.App-header, footer {
+  animation: fadeIn 2s ease-in-out, glow 1.5s infinite alternate;
+}

@@ -1,0 +1,148 @@
+/* wrapper styles */
+.bc_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: auto;
+    min-height: 100vh;
+    color: #fff;
+    overflow: hidden; 
+    position: relative;
+    margin-top:90px;
+}
+
+/* Container for the form */
+.bc_formContainer {
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-bottom: 20px;
+}
+
+/* Heading */
+.bc_h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 2rem;
+    font-family: 'Roboto', sans-serif;
+    color: #00d084;
+    text-shadow: 0 0 10px rgba(0, 255, 190, 0.8);
+}
+
+/* Form group styling */
+.bc_formGroup {
+    margin-bottom: 20px;
+    position: relative; /* Relative positioning for animation */
+}
+
+/* Label styling */
+.bc_label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    color: #e0e0e0;
+}
+
+/* Input styling */
+.bc_input {
+    width: calc(100% - 24px); 
+    padding: 12px;
+    border: 2px solid #00d084;
+    border-radius: 8px;
+    background: #1e1e1e;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bc_input:focus {
+    border-color: #00bfae;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 255, 190, 0.8);
+}
+
+/* Button styling */
+.bc_submitBtn, .bc_cancelBtn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #00d084, #00bfae);
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.bc_submitBtn:hover, .bc_cancelBtn:hover {
+    background: linear-gradient(135deg, #00bfae, #00d084);
+    transform: scale(1.02);
+}
+
+/* Result card styling */
+.bc_resultCard {
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Error card styling */
+.bc_errorCard {
+    width: 100%;
+    max-width: 700px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    background: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Additional styles for error message */
+.bc_errorCard p {
+    margin: 0;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Add a fade-in effect for the result card */
+.bc_resultCard.show,
+.bc_errorCard.show {
+    opacity: 1;
+}
+
+/* Light animation effect */
+@keyframes bc_lightAnimation {
+    0% {
+        transform: translateX(0);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translateX(20px);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 0.5;
+    }
+}
