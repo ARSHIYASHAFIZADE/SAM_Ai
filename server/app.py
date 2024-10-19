@@ -113,7 +113,7 @@ def preprocess_female_diabetes():
     # Get the path from an environment variable
 
     # Read the CSV file
-    Diabetes_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM-Ai/main/server/dfw.csv')
+    Diabetes_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM_Ai/refs/heads/main/server/dfw.csv')
     print("Current working directory:", Diabetes_DS)
     # Replace 0 values with NaN for relevant columns
     Diabetes_DS[['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']] = Diabetes_DS[['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age']].replace(0, np.nan)
