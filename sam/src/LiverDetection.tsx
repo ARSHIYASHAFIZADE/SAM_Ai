@@ -62,7 +62,7 @@ const LiverDetection: React.FC = () => {
         ];
 
         try {
-            const response = await axios.post('http://localhost:5000/detect_liver', {
+            const response = await axios.post('hhttps://sam-ai-mu6e.onrender.com/api/detect_liver', {
                 input_data: formattedData
             });
             setResult(response.data);
