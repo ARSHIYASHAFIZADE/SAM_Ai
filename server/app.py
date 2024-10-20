@@ -52,7 +52,8 @@ def test_redis():
 def serve_frontend():
     return send_from_directory(app.static_folder, 'index.html')
     
-CORS(app, supports_credentials=True )
+CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "https://sam-ai-7lwa.onrender.com"}})
+
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
 server_Session = Session(app)
