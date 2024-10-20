@@ -47,10 +47,9 @@ def test_redis():
     session['test'] = 'Redis working!'
     return jsonify({"message": session.get('test', 'Failed to set session')})
 
-# Serve React frontend
 @app.route('/')
-def serve_frontend():
-    return send_from_directory(app.static_folder, 'index.html')
+def hello_world():
+    return "Hello World"
     
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "https://sam-ai-7lwa.onrender.com"}})
 
