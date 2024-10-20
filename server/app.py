@@ -42,6 +42,11 @@ import os
 
 app = Flask(__name__)
 
+@app.route('/test_redis')
+def test_redis():
+    session['test'] = 'Redis working!'
+    return jsonify({"message": session.get('test', 'Failed to set session')})
+
 # Serve React frontend
 @app.route('/')
 def serve_frontend():
