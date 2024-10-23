@@ -42,6 +42,10 @@ import os
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "https://sam-ai-7lwa.onrender.com"}})
+app.config.from_object(ApplicationConfig)
+bcrypt = Bcrypt(app)
+server_Session = Session(app)
+db.init_app(app)
 with app.app_context():
     db.create_all()
     
@@ -54,11 +58,6 @@ def test_redis():
 def hello_world():
     return "Hello World"
     
-
-app.config.from_object(ApplicationConfig)
-bcrypt = Bcrypt(app)
-server_Session = Session(app)
-db.init_app(app)
 @cross_origin
 @app.route('/@me')
 def get_current_user():
