@@ -46,7 +46,7 @@ const WomanDiabetes = () => {
         };
     
         try {
-            const response = await axios.post('https://sam-ai-mu6e.onrender.com/api/predict', { data: numericData });
+            const response = await axios.post('https://sam-ai-mu6e.onrender.com/predict', { data: numericData });
             setResult(response.data);
             setBlur(true);
         } catch (error) {
