@@ -6,7 +6,7 @@ const LandingPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
 
     const logoutUser = async () => {
-        await httpClient.post("https://sam-ai-mu6e.onrender.com/api/logout");
+        await httpClient.post("https://sam-ai-mu6e.onrender.com/logout");
         window.location.href = "/";
     };
 
