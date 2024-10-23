@@ -41,7 +41,7 @@ from flask import Flask, send_from_directory
 import os
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "https://sam-ai-7lwa.onrender.com"}})
+CORS(app, supports_credentials=True, resources={r"/login/*": {"origins": "https://sam-ai-7lwa.onrender.com"}})
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
 server_Session = Session(app)
