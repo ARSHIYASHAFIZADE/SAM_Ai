@@ -41,7 +41,10 @@ from flask import Flask, send_from_directory
 import os
 
 app = Flask(__name__)
-
+CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "https://sam-ai-7lwa.onrender.com"}})
+with app.app_context():
+    db.create_all()
+    
 @app.route('/test_redis')
 def test_redis():
     session['test'] = 'Redis working!'
@@ -51,7 +54,6 @@ def test_redis():
 def hello_world():
     return "Hello World"
     
-CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "https://sam-ai-7lwa.onrender.com"}})
 
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
@@ -99,8 +101,6 @@ def login_user():
         "id":user.id,
         "email":user.email,
     })
-with app.app_context():
-    db.create_all()
 # Load and preprocess dataset for female diabetes detection
 def preprocess_female_diabetes():
     global Diabetes_DS, transformer, scaler, gbc, model, upper, feature_names
