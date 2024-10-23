@@ -54,7 +54,7 @@ const HeartDisease: React.FC = () => {
         };
     
         try {
-            const response = await axios.post('https://sam-ai-mu6e.onrender.com/api/detect_heart', { data: numericData });
+            const response = await axios.post('https://sam-ai-mu6e.onrender.com/detect_heart', { data: numericData });
             setResult(response.data);
             setBlur(true);
         } catch (error) {
