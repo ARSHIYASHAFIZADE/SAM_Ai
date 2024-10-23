@@ -8,7 +8,7 @@ const RegisterPage: React.FC = () => {
 
   const registerUser = async () => {
     try {
-      await httpClient.post("https://sam-ai-mu6e.onrender.com/api/register", {
+      await httpClient.post("https://sam-ai-mu6e.onrender.com/register", {
         email,
         password,
       });
