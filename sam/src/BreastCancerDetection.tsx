@@ -71,7 +71,7 @@ const BreastCancerDetection: React.FC = () => {
         }
 
         try {
-            const response = await axios.post('https://sam-ai-mu6e.onrender.com/api/detect_breast_cancer', inputData, { withCredentials: true });
+            const response = await axios.post('https://sam-ai-mu6e.onrender.com/detect_breast_cancer', inputData, { withCredentials: true });
             setResult(response.data);
             setError(null);
             setBlur(true);
