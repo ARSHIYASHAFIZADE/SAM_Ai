@@ -12,7 +12,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
     const logInUser = async () => {
         try {
-            const resp = await httpClient.post("https://sam-ai-mu6e.onrender.com/api/login", {
+            const resp = await httpClient.post("https://sam-ai-mu6e.onrender.com/login", {
                 email,
                 password,
             });
