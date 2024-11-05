@@ -11,7 +11,7 @@ class ApplicationConfig:
     
     SESSION_TYPE = 'redis'
     SESSION_PERMANENT = False 
-    SESSION_USE_SIGNER = True  # Corrected typo: "USER_SIGNER" -> "USE_SIGNER"
+    SESSION_USE_SIGNER = True 
     
     # Use Redis URL from environment for production
     SESSION_REDIS = redis.from_url(os.environ.get("REDIS_URL", "redis://127.0.0.1:6379"))
