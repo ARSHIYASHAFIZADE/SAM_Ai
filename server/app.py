@@ -193,7 +193,7 @@ def predict():
         
         # Apply preprocessing steps to the input data
         input_df['NewBMI'] = pd.cut(input_df['BMI'], bins=[-np.inf, 18.5, 24.9, 29.9, 34.9, 39.9, np.inf], labels=["Underweight", "Normal", "Overweight", "Obesity 1", "Obesity 2", "Obesity 3"])
-        input_df['NewInsulinScore'] = input_df.apply(set_insulin, axis=1)
+        # input_df['NewInsulinScore'] = input_df.apply(set_insulin, axis=1)
         input_df["NewGlucose"] = pd.cut(input_df["Glucose"], bins=[-np.inf, 70, 99, 126, np.inf], labels=["Low", "Normal", "Overweight", "High"])  
 
         # Generate dummies for categorical features
