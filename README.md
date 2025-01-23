@@ -2,7 +2,7 @@ SAM AI - Artificial Intelligence in Medicine
 SAM AI is a web-based platform that leverages artificial intelligence to assist in diagnosing, treating, and preventing diseases with greater accuracy and efficiency. It provides users with a personal dashboard to access past tests, download results, and consult on health-related queries.
 
 🔗 Live App: SAM AI on Render https://sam-ai-7lwa.onrender.com
-(Note: The free Render hosting may result in slower response times and occasional delays.)
+(Note: The free Render hosting may result in slower response times and occasional delays. recommended to run locally)
 
 About Artificial Intelligence in Medicine
 Artificial intelligence (AI) in medicine acts as a powerful assistant for healthcare professionals, helping diagnose, treat, and prevent diseases with precision and speed. Below is an overview of its applications and benefits:
