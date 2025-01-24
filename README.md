@@ -35,8 +35,7 @@ Python 3.8+
 Flask
 Dependencies listed in requirements.txt.
 Installation
-bash
-Copy
+
 # Clone the repository
 git clone https://github.com/your-repo-link.git
 
@@ -46,8 +45,7 @@ cd sam-ai
 # Install dependencies
 pip install -r requirements.txt
 🌐 Run Locally
-bash
-Copy
+
 # Run the Flask application
 python app.py
 
