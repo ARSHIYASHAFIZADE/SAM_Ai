@@ -2,28 +2,22 @@ import Arshiya from './assets/Arshiya.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhoneAlt } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedinIn, faGithub } from '@fortawesome/free-brands-svg-icons';
+
 const Contact = () => {
   return (
-    
-    <div>
-      <section id="home" className="home-section">
-        <div className="home-content">
-          <h1>Welcome to SAM AI</h1>
-          <p>Revolutionizing healthcare with cutting-edge AI technology.</p>
+    <div> 
+      <div className="about-card" style={{ marginTop: "100px" }}>
+        <div className="card-front">
+          <img src={Arshiya} alt="AI Member" />
         </div>
-      </section>
-      <div className="about-content">
-        <div className="about-card">
-          <div className="card-front">
-            <img src={Arshiya} alt="AI Member" />
-          </div>
-          <div className="card-back">
-            <h3>Arshiya Shafizade</h3>
-            <p><strong>Name:</strong> Arshiya Shafizade<br></br><hr></hr>
-              <strong>Email:</strong> shafizadearshiya@gmail.com<br></br><hr></hr>
-              <strong>Phone:</strong> +60 172821378<br></br><hr></hr>
-              <strong>Role:</strong> FUll stack web developer & AI specialist</p>
-          </div>
+        <div className="card-back">
+          <h3>Arshiya Shafizade</h3>
+          <p>
+            <strong>Name:</strong> Arshiya Shafizade<br /><hr />
+            <strong>Email:</strong> shafizadearshiya@gmail.com<br /><hr />
+            <strong>Phone:</strong> +60 172821378<br /><hr />
+            <strong>Role:</strong> Full stack web developer & AI specialist
+          </p>
         </div>
       </div>
       <div className="contact-info">
@@ -39,7 +33,7 @@ const Contact = () => {
             <FontAwesomeIcon icon={faGithub} />
           </a>
         </div>
-    </div>
+      </div>
     </div>
   );
 }
