@@ -12,8 +12,8 @@ main {
 .home-section {
   background: linear-gradient(135deg, #0026ff38, #e52e7159);
   color: rgb(245, 245, 245);
-  padding: 100px 20px;
-  border-radius: 20px;
+  padding: 50px 20px;
+  border-radius: 5px;
   text-align: center;
 }
 
@@ -147,7 +147,13 @@ main {
   border-radius: 10px;
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.236), -2px -4px 8px rgba(0, 0, 0, 0.586);
 }
-
+.social-links {
+  z-index: 9999 !important;
+  position: relative;
+}
+.contact-info{
+  margin-top: 0%;
+}
 #samvid1 {
   width: 250px;
   text-align: center;
@@ -206,7 +212,8 @@ footer {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: inherit; /* Inherit color from parent */
+  color: inherit; 
+  max-height: 10px;
 }
 
 .navbar-nav .nav-item a .fa {
@@ -227,13 +234,7 @@ footer {
   text-align: center;
   color: #ffffff70;
 }
-.social-links {
-  z-index: 9999 !important;
-  position: relative;
-}
-.contact-info{
-  margin-top: 10px;
-}
+
 
 /* About.css */
 
