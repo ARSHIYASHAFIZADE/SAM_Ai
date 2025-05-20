@@ -227,7 +227,13 @@ footer {
   text-align: center;
   color: #ffffff70;
 }
-
+.social-links {
+  z-index: 9999 !important;
+  position: relative;
+}
+.contact-info{
+  margin-top: 0%;
+}
 
 /* About.css */
 
