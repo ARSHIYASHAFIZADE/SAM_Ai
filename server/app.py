@@ -41,7 +41,29 @@ from flask import Flask, send_from_directory
 import os
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, origins=["https://sam-ai-7lwa.onrender.com"], methods=["GET", "POST"])
+# Global CORS configuration
+CORS(app, 
+     resources={r"/*": {"origins": ["https://sam-ai-7lwa.onrender.com", "http://localhost:3000", "http://127.0.0.1:3000"]}},
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization"],
+     supports_credentials=True)
+
+# Global OPTIONS handler to ensure preflight requests are always answered
+@app.before_request
+def handle_preflight():
+    if request.method == "OPTIONS":
+        response = app.make_response("")
+        origin = request.headers.get('Origin')
+        allowed_origins = ["https://sam-ai-7lwa.onrender.com", "http://localhost:3000", "http://127.0.0.1:3000"]
+        if origin in allowed_origins:
+            response.headers.add("Access-Control-Allow-Origin", origin)
+        else:
+            response.headers.add("Access-Control-Allow-Origin", "https://sam-ai-7lwa.onrender.com")
+            
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        response.headers.add("Access-Control-Allow-Credentials", "true")
+        return response, 204
 
 app.config.from_object(ApplicationConfig)
 bcrypt = Bcrypt(app)
@@ -59,7 +81,6 @@ def test_redis():
 def hello_world():
     return "Hello World"
     
-@cross_origin
 @app.route('/@me')
 def get_current_user():
     user_id = session.get("user_id")
@@ -70,7 +91,6 @@ def get_current_user():
         "id":user.id,
         "email":user.email
     })
-@cross_origin
 @app.route("/register", methods=["POST"])
 def register_user():
     email = request.json['email']
@@ -86,7 +106,6 @@ def register_user():
         "id":new_user.id,
         "email":new_user.email,
     })
-@cross_origin
 @app.route('/login', methods=['POST'])
 def login_user():
     email = request.json['email']
