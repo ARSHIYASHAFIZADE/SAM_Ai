@@ -1,5 +1,14 @@
 # SAM AI — Medical Diagnosis Tool
 
+![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.x-000000?logo=flask&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?logo=scikitlearn&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Deploy](https://img.shields.io/badge/Render-Live-46E3B7?logo=render&logoColor=white)
+
 A web app that helps predict the likelihood of certain diseases using machine learning. You fill in your health data, and SAM AI runs it through trained models to give you an assessment. It's not a replacement for a doctor — think of it more like a screening tool that can flag potential issues early.
 
 🔗 **Try it out:** [sam-ai-7lwa.onrender.com](https://sam-ai-7lwa.onrender.com)
