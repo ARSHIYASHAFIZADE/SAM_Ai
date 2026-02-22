@@ -11,7 +11,13 @@ class ApplicationConfig:
     SQLALCHEMY_DATABASE_URI = r"sqlite:///./db.sqlite"  # Change if using a production database
 
     # Session settings for Redis
-    SESSION_TYPE = 'redis'
+    # Session settings
+    # For local development, use filesystem instead of Redis to avoid connection errors
+    SESSION_TYPE = 'filesystem' 
+    # SESSION_TYPE = 'redis'
     SESSION_PERMANENT = False
     SESSION_USE_SIGNER = True
-    SESSION_REDIS = redis.from_url(os.environ.get("REDIS_URL"))  # Connect to Redis using the environment variable
+    # Cookie Settings for Localhost/Production
+    SESSION_COOKIE_SAMESITE = 'Lax' # 'None' requires Secure=True. 'Lax' works good for localhost.
+    SESSION_COOKIE_SECURE = False   # Set to True in production with HTTPS
+    # SESSION_REDIS = redis.from_url(os.environ.get("REDIS_URL", "redis://localhost:6379"))

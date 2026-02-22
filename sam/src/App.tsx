@@ -1,22 +1,38 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
-import Home from './Home';
-import Contact from './Contact';
-import About from './About';
-import ManDiabetes from './ManDiabetes';
-import WomanDiabetes from './WomanDiabetes';
-import HeartDisease from './HeartDisease';
-import LoginPage from "./LoginPage";
-import NotFound from "./NotFound";
-import RegisterPage from "./RegisterPage";
-import LiverDetection from "./LiverDetection";
-import BreastCancerDetection from "./BreastCancerDetection";
-import BackgroundAnimation from './BackgroundAnimation'; // Import the BackgroundAnimation component
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Home from './pages/Home';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import HeartDisease from './pages/HeartDisease';
+import LiverDetection from './pages/LiverDetection';
+import ManDiabetes from './pages/ManDiabetes';
+import WomanDiabetes from './pages/WomanDiabetes';
+import BreastCancerDetection from './pages/BreastCancerDetection';
+import './styles/global.css';
 
-function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+import AboutPage from './pages/AboutPage';
+
+import GooeyBackground from './components/common/GooeyBackground';
+import RequireAuth from './components/auth/RequireAuth';
+import ScrollToTop from './components/common/ScrollToTop';
+
+// Simple placeholder for Contact to prevent errors if not migrated yet
+const PlaceholderPage = ({ title }: { title: string }) => (
+    <div style={{ padding: '4rem', textAlign: 'center', color: 'white' }}>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>{title}</h1>
+        <p>Coming Soon with the new design.</p>
+        <a href="/" style={{ color: 'var(--primary)', marginTop: '1rem', display: 'inline-block' }}>Go Home</a>
+    </div>
+);
+
+const App = () => {
+    // Lazy initialization of auth state to valid initial flicker/redirects
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+        return !!sessionStorage.getItem('user_id');
+    });
 
     useEffect(() => {
+        // Double check in case storage changes (optional, but good practice)
         const user = sessionStorage.getItem('user_id');
         if (user) {
             setIsAuthenticated(true);
@@ -28,47 +44,51 @@ function App() {
         setIsAuthenticated(true);
     };
 
-    const handleLogout = () => {
-        sessionStorage.removeItem('user_id');
-        setIsAuthenticated(false);
-    };
-
     return (
         <Router>
+            <ScrollToTop />
             <div className="App">
-                {/* Background Animation */}
-                <BackgroundAnimation />
-                <header className="App-header">
-                    <nav className="navbar">
-                        <div className="navbar-brand">SAM AI</div>
-                        <ul className="navbar-nav">
-                            <li className="nav-item"><Link to="/">Home</Link></li>
-                            {!isAuthenticated && <li className="nav-item"><Link to="/login">Login</Link></li>}
-                            {!isAuthenticated && <li className="nav-item"><Link to="/register">Register</Link></li>}
-                            {isAuthenticated && <li className="nav-item"><Link to="/" onClick={handleLogout}>Logout</Link></li>}
-                            <li className="nav-item"><Link to="/about">About</Link></li>
-                            <li className="nav-item"><Link to="/contact">Contact</Link></li>
-                        </ul>
-                    </nav>
-                </header>
-                <main>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/contact" element={<Contact />} />
-                        <Route path="/manDiabetes" element={isAuthenticated ? <ManDiabetes /> : <Navigate to="/login" />} />
-                        <Route path="/womanDiabetes" element={isAuthenticated ? <WomanDiabetes /> : <Navigate to="/login" />} />
-                        <Route path="/heartDisease" element={isAuthenticated ? <HeartDisease /> : <Navigate to="/login" />} />
-                        <Route path="/liverDetection" element={isAuthenticated ? <LiverDetection /> : <Navigate to="/login" />} />
-                        <Route path="/breastCancerDetection" element={isAuthenticated ? <BreastCancerDetection /> : <Navigate to="/login" />} />
-                        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-                        <Route path="/register" element={<RegisterPage />} />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </main>
-                <footer>
-                    <p>&copy; 2024 SAM AI. All rights reserved.</p>
-                </footer>
+                <GooeyBackground />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/contact" element={<PlaceholderPage title="Contact Us" />} />
+
+                    {/* Auth Routes */}
+                    <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+                    <Route path="/register" element={<RegisterPage />} />
+
+                    {/* Protected Routes */}
+                    <Route path="/heartDisease" element={
+                        <RequireAuth isAuthenticated={isAuthenticated}>
+                            <HeartDisease />
+                        </RequireAuth>
+                    } />
+                    <Route path="/liverDetection" element={
+                        <RequireAuth isAuthenticated={isAuthenticated}>
+                            <LiverDetection />
+                        </RequireAuth>
+                    } />
+                    <Route path="/manDiabetes" element={
+                        <RequireAuth isAuthenticated={isAuthenticated}>
+                            <ManDiabetes />
+                        </RequireAuth>
+                    } />
+                    <Route path="/womanDiabetes" element={
+                        <RequireAuth isAuthenticated={isAuthenticated}>
+                            <WomanDiabetes />
+                        </RequireAuth>
+                    } />
+                    <Route path="/breastCancerDetection" element={
+                        <RequireAuth isAuthenticated={isAuthenticated}>
+                            <BreastCancerDetection />
+                        </RequireAuth>
+                    } />
+
+
+                    {/* Fallback */}
+                    <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
             </div>
         </Router>
     );
