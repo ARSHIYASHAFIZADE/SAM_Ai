@@ -1,2 +1,1 @@
-// export const API_BASE_URL = 'https://sam-ai-7lwa.onrender.com';
-export const API_BASE_URL = 'http://127.0.0.1:5000';
+export const API_BASE_URL = 'https://sam-ai-mu6e.onrender.com';

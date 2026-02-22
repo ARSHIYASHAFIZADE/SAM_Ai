@@ -13,7 +13,7 @@ const LandingPage: React.FC = () => {
     useEffect(() => {
         (async () => {
             try {
-                const resp = await httpClient.get("//localhost:5000/@me");
+                const resp = await httpClient.get("https://sam-ai-mu6e.onrender.com/@me");
                 setUser(resp.data);
             } catch (error) {
                 console.log("Not authenticated");
