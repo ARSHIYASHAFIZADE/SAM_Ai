@@ -1,82 +1,75 @@
-# SAM AI: Intelligent Medical Diagnostic Assistant
+# SAM AI — Medical Diagnosis Tool
 
-SAM AI is a diagnostic support platform that utilizes machine learning models to provide clinical-grade health insights. Designed for both healthcare efficiency and patient accessibility, the application offers high-precision analysis for chronic conditions, integrated report management, and AI-assisted health consultations.
+A web app that helps predict the likelihood of certain diseases using machine learning. You fill in your health data, and SAM AI runs it through trained models to give you an assessment. It's not a replacement for a doctor — think of it more like a screening tool that can flag potential issues early.
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://sam-ai-7lwa.onrender.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
----
-
-## 🔬 Predictive Capabilities
-The application provides specialized diagnostic modules for high-risk conditions, using trained models to evaluate risk factors and clinical data:
-
-- **Cardiovascular Health**: Analysis of heart disease risk factors.
-- **Oncology (Breast Cancer)**: High-accuracy detection based on clinical indicators.
-- **Metabolic Health**: Specialized prediction models for Diabetes.
-- **Hepatology**: Diagnostic insights for Liver disease.
-
-## ✨ Core Features
-- **Integrated Health Dashboard**: A centralized portal to review, manage, and download historical diagnostic reports.
-- **Consultation Interface**: Direct access to health queries with responses powered by medical-context models.
-- **Transparent Insights**: Actionable results designed to bridge the gap between complex data and patient understanding.
-
-## 🛠 Technology Stack
-- **Frontend**: React (Vite), TypeScript, Vanilla CSS
-- **Backend**: Flask (Python), SQLAlchemy
-- **Database**: SQLite / PostgreSQL
-- **Deployment**: Render
+🔗 **Try it out:** [sam-ai-7lwa.onrender.com](https://sam-ai-7lwa.onrender.com)
+*(Heads up — it's on Render's free tier, so cold starts can take ~30s. Runs way faster locally.)*
 
 ---
 
-## 🚀 Getting Started
+## What It Can Detect
 
-### Prerequisites
-- Node.js (v18+)
-- Python (3.9+)
+| Condition | How It Works |
+|-----------|-------------|
+| ❤️ Heart Disease | Evaluates risk factors like blood pressure, cholesterol, age, etc. |
+| 🎗️ Breast Cancer | Analyzes cell measurements to classify tumors as benign or malignant |
+| 🩸 Diabetes | Separate models for men and women, since risk factors differ |
+| 🫁 Liver Disease | Checks enzyme levels and other liver function indicators |
 
-### Installation
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/ARSHIYASHAFIZADE/SAM_Ai.git
-   cd SAM_Ai
-   ```
-
-2. **Frontend Setup**
-   ```bash
-   cd sam
-   npm install
-   ```
-
-3. **Backend Setup**
-   ```bash
-   cd ../server
-   python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-
-### Running Locally
-
-1. **Start the Backend** (From `/server`)
-   ```bash
-   python app.py
-   ```
-
-2. **Start the Frontend** (From `/sam`)
-   ```bash
-   npm run dev
-   ```
+## Other Features
+- **User accounts** — sign up, log in, keep your results saved
+- **Dashboard** — view and download your past test results
+- **Health Q&A** — ask general health-related questions
 
 ---
 
-## 📸 Interface Preview
-![Dashboard Preview](https://github.com/user-attachments/assets/d23467f5-2dbe-4105-8a9c-67cc254a97e9)
+## Tech Stack
+
+| Layer | Tech |
+|-------|------|
+| Frontend | React + TypeScript (Vite) |
+| Backend | Flask (Python) |
+| Database | SQLite (dev) / PostgreSQL (prod) |
+| ML Models | scikit-learn |
+| Hosting | Render |
 
 ---
 
-## ⚠️ Medical Disclaimer
-**Important**: SAM AI is a diagnostic support tool designed for informational purposes and research. It is **not** a substitute for professional medical advice, diagnosis, or treatment. Always seek the guidance of a qualified healthcare provider for any medical concerns.
+## Run It Locally
 
-## 📄 License
-This project is licensed under the MIT License. See [LICENSE](https://opensource.org/licenses/MIT) for more details.
+**You'll need:** Node.js 18+ and Python 3.9+
+
+```bash
+# Clone it
+git clone https://github.com/ARSHIYASHAFIZADE/SAM_Ai.git
+cd SAM_Ai
+```
+
+**Backend:**
+```bash
+cd server
+python -m venv venv
+venv\Scripts\activate        # Mac/Linux: source venv/bin/activate
+pip install -r requirements.txt
+python app.py                # Starts on http://localhost:5000
+```
+
+**Frontend:**
+```bash
+cd sam
+npm install
+npm run dev                  # Starts on http://localhost:5173
+```
+
+---
+
+## Screenshot
+![SAM AI Dashboard](https://github.com/user-attachments/assets/d23467f5-2dbe-4105-8a9c-67cc254a97e9)
+
+---
+
+## ⚠️ Disclaimer
+This is a personal project built for learning and demonstration purposes. The predictions are based on ML models trained on public datasets — they are **not** medical advice. Always consult a real doctor for health concerns.
+
+## License
+MIT — do whatever you want with it. See [LICENSE](https://opensource.org/licenses/MIT).
