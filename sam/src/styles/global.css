@@ -219,6 +219,12 @@ input[type=number] {
   appearance: textfield;
 }
 
+/* Fix for native select options white-on-white text issue */
+option {
+  background-color: var(--background);
+  color: var(--text-main);
+}
+
 /* Diagnosis Info Sections */
 .info-section {
   margin-top: 3rem;
