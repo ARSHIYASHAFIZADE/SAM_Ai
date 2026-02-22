@@ -64,7 +64,9 @@ npm run dev                  # Starts on http://localhost:5173
 ---
 
 ## Screenshot
-![SAM AI Dashboard](https://github.com/user-attachments/assets/d23467f5-2dbe-4105-8a9c-67cc254a97e9)
+
+<img width="1883" height="896" alt="image" src="https://github.com/user-attachments/assets/6854a10d-2828-4c41-b5d3-c6407fa4cf9a" />
+<img width="1212" height="903" alt="image" src="https://github.com/user-attachments/assets/21105ad4-a846-4ec4-bf76-9a079de225aa" />
 
 ---
 
