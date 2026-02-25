@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from './utils/api';
 import styles from './ManDiabetes.module.css';
 
 interface PredictionResult {
@@ -37,13 +38,13 @@ const ManDiabetes = () => {
             Hypertension: inputData.Hypertension === 'Yes' ? 1 : 0, // Maps Yes to 1 and No to 0
             Heart_disease: inputData.Heart_disease === 'Yes' ? 1 : 0, // Maps Yes to 1 and No to 0
             Smoking_history: inputData.Smoking_history,
-            BMI: Number(inputData.BMI),
+            bmi: Number(inputData.BMI),
             HbA1c_level: Number(inputData.HbA1c_level),
-            Blood_glucose_level: Number(inputData.Blood_glucose_level),
+            blood_glucose_level: Number(inputData.Blood_glucose_level),
         };
 
         try {
-            const response = await axios.post('https://sam-ai-mu6e.onrender.com/predict_male', { data: numericData });
+            const response = await axios.post(`${API_BASE_URL}/predict_male`, { data: numericData });
             setResult(response.data);
             setBlur(true);
         } catch (error) {

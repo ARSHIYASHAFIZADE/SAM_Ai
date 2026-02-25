@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from './utils/api';
 import styles from './LiverDetection.module.css';
 
 interface PredictionResult {
@@ -11,14 +12,14 @@ const LiverDetection: React.FC = () => {
     const [inputData, setInputData] = useState({
         Age: '',
         Gender: '',
-        Total_Bilirubin: '',
-        Direct_Bilirubin: '',
-        Alkaline_Phosphotase: '',
-        Alamine_Aminotransferase: '',
-        Aspartate_Aminotransferase: '',
-        Total_Proteins: '',
-        Albumin: '',
-        Albumin_and_Globulin_Ratio: ''
+        BMI: '',
+        AlcoholConsumption: '',
+        Smoking: '',
+        GeneticRisk: '',
+        PhysicalActivity: '',
+        Diabetes: '',
+        Cholesterol: '',
+        LiverFunctionTest: ''
     });
 
     const [result, setResult] = useState<PredictionResult | null>(null);
@@ -37,32 +38,32 @@ const LiverDetection: React.FC = () => {
 
         const numericData = {
             Age: Number(inputData.Age),
-            Gender: inputData.Gender === 'Male' ? 0 : 1,  // Convert gender to 0 or 1
-            Total_Bilirubin: Number(inputData.Total_Bilirubin),
-            Direct_Bilirubin: Number(inputData.Direct_Bilirubin),
-            Alkaline_Phosphotase: Number(inputData.Alkaline_Phosphotase),
-            Alamine_Aminotransferase: Number(inputData.Alamine_Aminotransferase),
-            Aspartate_Aminotransferase: Number(inputData.Aspartate_Aminotransferase),
-            Total_Proteins: Number(inputData.Total_Proteins),
-            Albumin: Number(inputData.Albumin),
-            Albumin_and_Globulin_Ratio: Number(inputData.Albumin_and_Globulin_Ratio)
+            Gender: Number(inputData.Gender),
+            BMI: Number(inputData.BMI),
+            AlcoholConsumption: Number(inputData.AlcoholConsumption),
+            Smoking: Number(inputData.Smoking),
+            GeneticRisk: Number(inputData.GeneticRisk),
+            PhysicalActivity: Number(inputData.PhysicalActivity),
+            Diabetes: Number(inputData.Diabetes),
+            Cholesterol: Number(inputData.Cholesterol),
+            LiverFunctionTest: Number(inputData.LiverFunctionTest)
         };
 
         const formattedData = [
             numericData.Age,
             numericData.Gender,
-            numericData.Total_Bilirubin,
-            numericData.Direct_Bilirubin,
-            numericData.Alkaline_Phosphotase,
-            numericData.Alamine_Aminotransferase,
-            numericData.Aspartate_Aminotransferase,
-            numericData.Total_Proteins,
-            numericData.Albumin,
-            numericData.Albumin_and_Globulin_Ratio
+            numericData.BMI,
+            numericData.AlcoholConsumption,
+            numericData.Smoking,
+            numericData.GeneticRisk,
+            numericData.PhysicalActivity,
+            numericData.Diabetes,
+            numericData.Cholesterol,
+            numericData.LiverFunctionTest
         ];
 
         try {
-            const response = await axios.post('https://sam-ai-mu6e.onrender.com/detect_liver', {
+            const response = await axios.post(`${API_BASE_URL}/detect_liver`, {
                 input_data: formattedData
             });
             setResult(response.data);
@@ -105,102 +106,114 @@ const LiverDetection: React.FC = () => {
                             required
                         >
                             <option value="">Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                            <option value="0">Male</option>
+                            <option value="1">Female</option>
                         </select>
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="Total_Bilirubin">Total Bilirubin:</label>
+                        <label htmlFor="BMI">BMI:</label>
                         <input
                             type="number"
-                            id="Total_Bilirubin"
-                            name="Total_Bilirubin"
-                            placeholder="Total Bilirubin"
-                            value={inputData.Total_Bilirubin}
+                            id="BMI"
+                            name="BMI"
+                            step="0.01"
+                            placeholder="BMI (e.g., 22.5)"
+                            value={inputData.BMI}
                             onChange={handleChange}
                             required
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="Direct_Bilirubin">Direct Bilirubin:</label>
+                        <label htmlFor="AlcoholConsumption">Alcohol Consumption:</label>
                         <input
                             type="number"
-                            id="Direct_Bilirubin"
-                            name="Direct_Bilirubin"
-                            placeholder="Direct Bilirubin"
-                            value={inputData.Direct_Bilirubin}
+                            id="AlcoholConsumption"
+                            name="AlcoholConsumption"
+                            step="0.01"
+                            placeholder="Alcohol Consumption (Units/Week)"
+                            value={inputData.AlcoholConsumption}
                             onChange={handleChange}
                             required
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="Alkaline_Phosphotase">Alkaline Phosphotase:</label>
+                        <label htmlFor="Smoking">Smoking Status:</label>
+                        <select
+                            id="Smoking"
+                            name="Smoking"
+                            value={inputData.Smoking}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Status</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="GeneticRisk">Genetic Risk:</label>
+                        <select
+                            id="GeneticRisk"
+                            name="GeneticRisk"
+                            value={inputData.GeneticRisk}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Risk Level</option>
+                            <option value="0">Low</option>
+                            <option value="1">Medium</option>
+                            <option value="2">High</option>
+                        </select>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="PhysicalActivity">Physical Activity (Hrs/Week):</label>
                         <input
                             type="number"
-                            id="Alkaline_Phosphotase"
-                            name="Alkaline_Phosphotase"
-                            placeholder="Alkaline Phosphotase"
-                            value={inputData.Alkaline_Phosphotase}
+                            id="PhysicalActivity"
+                            name="PhysicalActivity"
+                            step="0.01"
+                            placeholder="Physical Activity"
+                            value={inputData.PhysicalActivity}
                             onChange={handleChange}
                             required
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="Alamine_Aminotransferase">Alamine Aminotransferase:</label>
+                        <label htmlFor="Diabetes">Diabetes Status:</label>
+                        <select
+                            id="Diabetes"
+                            name="Diabetes"
+                            value={inputData.Diabetes}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Status</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="Cholesterol">Cholesterol Level:</label>
                         <input
                             type="number"
-                            id="Alamine_Aminotransferase"
-                            name="Alamine_Aminotransferase"
-                            placeholder="Alamine Aminotransferase"
-                            value={inputData.Alamine_Aminotransferase}
+                            id="Cholesterol"
+                            name="Cholesterol"
+                            step="0.01"
+                            placeholder="Cholesterol"
+                            value={inputData.Cholesterol}
                             onChange={handleChange}
                             required
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label htmlFor="Aspartate_Aminotransferase">Aspartate Aminotransferase:</label>
+                        <label htmlFor="LiverFunctionTest">Liver Function Test Score:</label>
                         <input
                             type="number"
-                            id="Aspartate_Aminotransferase"
-                            name="Aspartate_Aminotransferase"
-                            placeholder="Aspartate Aminotransferase"
-                            value={inputData.Aspartate_Aminotransferase}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Total_Proteins">Total Proteins:</label>
-                        <input
-                            type="number"
-                            id="Total_Proteins"
-                            name="Total_Proteins"
-                            placeholder="Total Proteins"
-                            value={inputData.Total_Proteins}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Albumin">Albumin:</label>
-                        <input
-                            type="number"
-                            id="Albumin"
-                            name="Albumin"
-                            placeholder="Albumin"
-                            value={inputData.Albumin}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Albumin_and_Globulin_Ratio">Albumin and Globulin Ratio:</label>
-                        <input
-                            type="number"
-                            id="Albumin_and_Globulin_Ratio"
-                            name="Albumin_and_Globulin_Ratio"
-                            placeholder="Albumin and Globulin Ratio"
-                            value={inputData.Albumin_and_Globulin_Ratio}
+                            id="LiverFunctionTest"
+                            name="LiverFunctionTest"
+                            step="0.01"
+                            placeholder="Liver Function Test"
+                            value={inputData.LiverFunctionTest}
                             onChange={handleChange}
                             required
                         />
@@ -211,8 +224,8 @@ const LiverDetection: React.FC = () => {
             {result && (
                 <div className={styles.resultCard}>
                     <h2 className={styles.r}>Result</h2>
-                    <p className={styles.r}>Prediction: {result.prediction === 0 ? 'No liver problems' : 'Liver problems'}</p>
-                    <p className={styles.r}>Probability of having a healthy liver: {result.probability_healthy_liver}</p>
+                    <p className={styles.r}>Prediction: {result.prediction === 1 ? 'Liver Problem Detected' : 'No Liver Problems'}</p>
+                    <p className={styles.r}>Confidence: {result.probability_healthy_liver}%</p>
                     <button onClick={handleCancel} className={styles.cancelBtn}>Cancel</button>
                 </div>
             )}
@@ -221,4 +234,3 @@ const LiverDetection: React.FC = () => {
 };
 
 export default LiverDetection;
-    

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from './utils/api';
 import styles from './HeartDisease.module.css';
 
 interface PredictionResult {
@@ -54,7 +55,7 @@ const HeartDisease: React.FC = () => {
         };
     
         try {
-            const response = await axios.post('https://sam-ai-mu6e.onrender.com/detect_heart', { data: numericData });
+            const response = await axios.post(`${API_BASE_URL}/detect_heart`, { data: numericData });
             setResult(response.data);
             setBlur(true);
         } catch (error) {

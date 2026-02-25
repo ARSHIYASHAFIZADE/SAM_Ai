@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import httpClient from "./httpClient";
 import styles from "./login.module.css"; 
 import {Link} from 'react-router-dom'
+import { API_BASE_URL } from "./utils/api";
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const registerUser = async () => {
     try {
-      await httpClient.post("https://sam-ai-mu6e.onrender.com/register", {
+      await httpClient.post(`${API_BASE_URL}/register`, {
         email,
         password,
       });

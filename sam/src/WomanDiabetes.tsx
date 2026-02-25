@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from './utils/api';
 import styles from './WomanDiabetes.module.css';
 
 interface PredictionResult {
@@ -46,7 +47,7 @@ const WomanDiabetes = () => {
         };
     
         try {
-            const response = await axios.post('https://sam-ai-mu6e.onrender.com/predict', { data: numericData });
+            const response = await axios.post(`${API_BASE_URL}/predict`, { data: numericData });
             setResult(response.data);
             setBlur(true);
         } catch (error) {

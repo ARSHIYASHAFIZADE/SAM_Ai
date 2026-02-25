@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from './utils/api';
 import styles from './BreastCancerDetection.module.css';
 
 interface InputData {
@@ -71,7 +72,7 @@ const BreastCancerDetection: React.FC = () => {
         }
 
         try {
-            const response = await axios.post('https://sam-ai-mu6e.onrender.com/detect_breast_cancer', inputData, { withCredentials: true });
+            const response = await axios.post(`${API_BASE_URL}/detect_breast_cancer`, inputData, { withCredentials: true });
             setResult(response.data);
             setError(null);
             setBlur(true);

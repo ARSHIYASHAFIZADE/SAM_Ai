@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import httpClient from "./httpClient";
 import { User } from "./types";
+import { API_BASE_URL } from "./utils/api";
 
 const LandingPage: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
 
     const logoutUser = async () => {
-        await httpClient.post("https://sam-ai-mu6e.onrender.com/logout");
+        await httpClient.post(`${API_BASE_URL}/logout`);
         window.location.href = "/";
     };
 
     useEffect(() => {
         (async () => {
             try {
-                const resp = await httpClient.get("https://sam-ai-mu6e.onrender.com/@me");
+                const resp = await httpClient.get(`${API_BASE_URL}/@me`);
                 setUser(resp.data);
             } catch (error) {
                 console.log("Not authenticated");

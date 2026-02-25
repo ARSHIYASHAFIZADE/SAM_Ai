@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import httpClient from "./httpClient";
 import styles from "./login.module.css"; 
 import {Link} from 'react-router-dom'
+import { API_BASE_URL } from "./utils/api";
 interface LoginPageProps {
     onLogin: (userId: string) => void;
 }
@@ -12,7 +13,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
     const logInUser = async () => {
         try {
-            const resp = await httpClient.post("https://sam-ai-mu6e.onrender.com/login", {
+            const resp = await httpClient.post(`${API_BASE_URL}/login`, {
                 email,
                 password,
             });
