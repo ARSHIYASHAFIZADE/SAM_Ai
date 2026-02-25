@@ -36,8 +36,18 @@ app.config['MAIL_DEFAULT_SENDER'] = 'a6833351@gmail.com'
 mail.init_app(app)
 
 # CORS
+allowed_origins = [
+    "https://sam-ai-theta.vercel.app",
+    "https://sam-ai-7lwa.onrender.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://localhost:10000",
+    "http://127.0.0.1:10000"
+]
+
 CORS(app, 
-     resources={r"/*": {"origins": ["https://sam-ai-7lwa.onrender.com", "http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5173", "http://localhost:10000", "http://127.0.0.1:10000"]}},
+     resources={r"/*": {"origins": allowed_origins}},
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization"],
      supports_credentials=True)
@@ -51,7 +61,7 @@ def handle_preflight():
         if origin in allowed_origins:
             response.headers.add("Access-Control-Allow-Origin", origin)
         else:
-            response.headers.add("Access-Control-Allow-Origin", "https://sam-ai-7lwa.onrender.com")
+            response.headers.add("Access-Control-Allow-Origin", "https://sam-ai-theta.vercel.app")
             
         response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
