@@ -47,13 +47,13 @@ mail.init_app(app)
 # CORS — restrict to known origins
 allowed_origins = [
     "https://sam-ai-theta.vercel.app",
+    "https://sam-a456gz3zd-arshiyashafizades-projects.vercel.app",
     "https://sam-ai-7lwa.onrender.com",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "http://localhost:10000",
     "http://127.0.0.1:10000",
-    # Allow dynamic Vercel preview environments
     re.compile(r"^https://sam-.*\.vercel\.app$")
 ]
 
