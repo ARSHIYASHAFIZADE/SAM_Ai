@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRibbon, faMicroscope, faDna, faChartPie, faChartBar, faInfoCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
-import Input from '../components/common/Input';
+import FormField from '../components/common/FormField';
 import Button from '../components/common/Button';
 import Toast from '../components/common/Toast';
 import { API_BASE_URL } from '../utils/api';
@@ -17,7 +17,8 @@ interface PredictionResult {
     bar_chart?: string;
 }
 
-const BreastCancerDetection: React.FC = () => {
+const BreastCancerDetection: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
+
     // Initial state with all fields
     const fields = [
         'mean_radius', 'mean_texture', 'mean_perimeter', 'mean_area', 'mean_smoothness',
@@ -70,18 +71,32 @@ const BreastCancerDetection: React.FC = () => {
     }, [result]);
 
     const descriptions: { [key: string]: string } = {
-        mean_radius: "Mean distance from center to points on the perimeter",
-        mean_texture: "Standard deviation of gray-scale values",
-        mean_perimeter: "Mean size of the core tumor",
-        mean_area: "Mean area of the core tumor",
-        mean_smoothness: "Mean values of local variation in radius lengths",
+        // Base features
+        radius: "Average distance from the core center to points on the perimeter",
+        texture: "Standard deviation of gray-scale values indicating surface irregularity",
+        perimeter: "Total distance around the core tumor boundary",
+        area: "Total surface space covered by the cell nucleus",
+        smoothness: "Local variation in radius lengths indicating boundary smoothness",
+        compactness: "Ratio of perimeter squared to area, indicating shape density",
+        concavity: "Severity of concave indentations along the cell boundary",
+        concave_points: "Number of concave portions along the cell boundary outline",
+        symmetry: "Similarity of opposite halves of the cell nucleus",
+        fractal_dimension: "Complexity of the cell boundary (coastline approximation)",
     };
 
     const getTooltip = (field: string) => {
-        if (descriptions[field]) return descriptions[field];
-        if (field.includes('error')) return `Standard error of ${field.replace('_error', '').replace(/_/g, ' ')}`;
-        if (field.includes('worst')) return `Worst (largest) value for ${field.replace('worst_', '').replace(/_/g, ' ')}`;
-        return `Measurement of ${field.replace('mean_', '').replace(/_/g, ' ')}`;
+        // Find the base noun
+        const baseNouns = Object.keys(descriptions);
+        const baseField = baseNouns.find(noun => field.includes(noun));
+        
+        let desc = baseField ? descriptions[baseField] : "Cell nucleus characteristic";
+
+        // Add context based on the prefix/suffix
+        if (field.startsWith('mean_')) return `Average value: ${desc}`;
+        if (field.endsWith('_error')) return `Standard error (variance): ${desc}`;
+        if (field.startsWith('worst_')) return `Worst (largest/most severe) value measured: ${desc}`;
+        
+        return desc;
     };
 
     const formatLabel = (str: string) => {
@@ -131,7 +146,8 @@ const BreastCancerDetection: React.FC = () => {
     };
 
     return (
-        <MainLayout isAuthenticated={true} onLogout={() => sessionStorage.removeItem('user_id')}>
+        <MainLayout isAuthenticated={true} onLogout={onLogout}>
+
             <div className="page-container">
                 {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
@@ -166,30 +182,36 @@ const BreastCancerDetection: React.FC = () => {
                         <div className="hero-form fade-in-left">
                             {!result ? (
                                 <Card className="fixed-height-card">
-                                    <div className="scrollable-form-box">
-                                        <form onSubmit={handleSubmit} className="compact-grid-form four-col">
-                                            {fields.map((field) => (
-                                                <div key={field} className="compact-input">
-                                                    <Input
-                                                        label={formatLabel(field)}
-                                                        name={field}
-                                                        type="number"
-                                                        step="any"
-                                                        value={inputData[field]}
-                                                        onChange={handleChange}
-                                                        required
-                                                        tooltip={getTooltip(field)}
-                                                        className="compact-input-field" // Added class for targeting
-                                                    />
-                                                </div>
-                                            ))}
-                                            <div className="form-actions-fixed full-width-col" style={{ gridColumn: '1 / -1', padding: '0.75rem', marginTop: '0.5rem' }}>
-                                                <Button onClick={handleSubmit} variant="primary" size="lg" isLoading={isLoading} className="w-full glow-button compact-btn" style={{ fontSize: '1rem', padding: '0.6rem' }}>
-                                                    Analyze Cell Data
-                                                </Button>
-                                            </div>
-                                        </form>
+                                    <div className="form-header-sticky">
+                                        <h3>Patient Metrics Setup</h3>
+                                        <p>Enter 30 cellular characteristics</p>
                                     </div>
+                                    <form onSubmit={handleSubmit} className="form-layout-container">
+                                        <div className="scrollable-form-box">
+                                            <div className="compact-grid-form three-col">
+                                                {fields.map((field) => (
+                                                    <div key={field} className="compact-input">
+                                                        <FormField
+                                                            label={formatLabel(field)}
+                                                            name={field}
+                                                            type="number"
+                                                            step="any"
+                                                            value={inputData[field]}
+                                                            onChange={handleChange}
+                                                            required
+                                                            tooltip={getTooltip(field)}
+                                                            className="compact-input-field"
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="form-actions-sticky">
+                                            <Button type="submit" variant="primary" size="lg" isLoading={isLoading} className="w-full glow-button compact-btn" style={{ fontSize: '1rem', padding: '0.6rem' }}>
+                                                Analyze Cell Data
+                                            </Button>
+                                        </div>
+                                    </form>
                                 </Card>
                             ) : (
                                 <Card className="result-card fade-in-up" ref={resultRef}>
@@ -358,17 +380,33 @@ const BreastCancerDetection: React.FC = () => {
                     border: 1px solid rgba(255,255,255,0.1) !important;
                     display: flex;
                     flex-direction: column;
-                    height: auto;
-                    max-height: 650px;
+                    height: 600px; /* Give it a clear functional height */
+                    max-height: 80vh;
                     width: 100%;
-                    overflow: hidden;
+                    overflow: hidden; /* Crucial: traps scroll inside inner element */
                     border-radius: 12px !important;
+                }
+
+                .form-header-sticky {
+                    padding: 1.25rem 1.25rem 0.5rem;
+                    border-bottom: 1px solid rgba(255,255,255,0.05);
+                    background: rgb(30, 41, 59);
+                    z-index: 10;
+                }
+                .form-header-sticky h3 { margin: 0; font-size: 1.1rem; color: var(--text-main); }
+                .form-header-sticky p { margin: 0.25rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); }
+
+                .form-layout-container {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    overflow: hidden; /* Passes overflow down */
                 }
 
                 .scrollable-form-box {
                     padding: 1.25rem;
                     overflow-y: auto;
-                    flex: 1;
+                    flex: 1; /* Takes up remaining space */
                     scrollbar-width: thin;
                     scrollbar-color: var(--primary) rgba(255,255,255,0.1);
                 }
@@ -380,63 +418,29 @@ const BreastCancerDetection: React.FC = () => {
                 .compact-grid-form {
                     display: grid;
                     grid-template-columns: 1fr;
-                    gap: 0.75rem;
+                    gap: 1.25rem 0.75rem; /* Better vertical breathing room, consistent horizontal */
                     width: 100%;
                 }
 
-                .compact-grid-form.four-col { grid-template-columns: repeat(4, 1fr); }
+                /* 3 columns on large screens for better readability */
+                .compact-grid-form.three-col { grid-template-columns: repeat(3, 1fr); }
 
-                @media (max-width: 1200px) { .compact-grid-form.four-col { grid-template-columns: repeat(3, 1fr); } }
-                @media (max-width: 992px) { .compact-grid-form.four-col { grid-template-columns: repeat(2, 1fr); } }
-                @media (max-width: 768px) { .compact-grid-form.four-col { grid-template-columns: 1fr; } }
+                @media (max-width: 1024px) { .compact-grid-form.three-col { grid-template-columns: repeat(2, 1fr); } }
+                @media (max-width: 640px) { .compact-grid-form.three-col { grid-template-columns: 1fr; } }
                 
                 .compact-input {
                     display: flex;
                     flex-direction: column;
                     width: 100%;
+                    height: 100%; /* Ensure equal height */
                 }
 
-                .compact-input > div {
-                    margin-bottom: 0 !important;
-                    width: 100% !important;
-                }
-
-                /* STRICT INPUT STYLING (Override Input.tsx defaults) */
-                .compact-input input, .compact-input select {
-                    padding: 0.3rem 0.5rem !important;
-                    font-size: 0.85rem !important;
-                    height: 36px !important; /* Slightly larger for visibility */
-                    line-height: normal;
-                    width: 100% !important;
-                    background: rgba(255, 255, 255, 0.05) !important; /* Increase visibility */
-                    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-                    color: var(--text-main) !important;
-                    border-radius: 6px !important;
-                }
-                
-                .compact-input input:focus, .compact-input select:focus {
-                     border-color: var(--primary) !important;
-                     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2) !important;
-                     background: rgba(255, 255, 255, 0.1) !important;
-                }
-
-                .compact-input label {
-                    font-size: 0.75rem !important;
-                    margin-bottom: 0.25rem !important;
-                    color: var(--text-secondary) !important;
-                    display: block !important;
-                    font-weight: 500 !important;
-                }
-
-                .full-width-col {grid-column: span 4; }
-                @media (max-width: 1200px) { .full-width-col {grid-column: span 3; } }
-                @media (max-width: 992px) { .full-width-col {grid-column: span 2; } }
-                @media (max-width: 768px) { .full-width-col {grid-column: span 1; } }
-
-                .form-actions-fixed {
+                .form-actions-sticky {
                     padding: 1rem 1.25rem;
-                    background: transparent;
-                    /* border-top: 1px solid rgba(255,255,255,0.05); */
+                    background: rgba(30, 41, 59, 1); /* Solid back to hide scroll behind */
+                    border-top: 1px solid rgba(255,255,255,0.1);
+                    z-index: 10;
+                    margin-top: auto;
                 }
 
                 /* Educational Content Styles */

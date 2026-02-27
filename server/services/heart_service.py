@@ -6,18 +6,29 @@ from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split as tts
 from sklearn.linear_model import LogisticRegression
 from sklearn.compose import ColumnTransformer
+import joblib
+from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
+
+_MODELS_DIR = Path("saved_models")
+_HEART_BUNDLE = _MODELS_DIR / "heart_bundle.pkl"
 
 preprocessor_transformer_heart = None
 model_trained_heart = None
 
 def train_heart_model():
     global preprocessor_transformer_heart, model_trained_heart
-    
+    _MODELS_DIR.mkdir(exist_ok=True)
+    if _HEART_BUNDLE.exists():
+        b = joblib.load(_HEART_BUNDLE)
+        preprocessor_transformer_heart, model_trained_heart = b["preprocessor"], b["model"]
+        logger.info("Heart model loaded from disk.")
+        return
     try:
-        data = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM_Ai/refs/heads/main/server/diseaseheart/heart_disease_data.csv')
+        data = pd.read_csv('diseaseheart/heart_disease_data.csv')  # local
+
     except Exception as e:
         logger.error(f"Failed to load Heart Disease Dataset: {e}")
         return
@@ -67,6 +78,8 @@ def train_heart_model():
     # Save transformers for prediction
     preprocessor_transformer_heart = preprocessor
     model_trained_heart = model
+    joblib.dump({"preprocessor": preprocessor, "model": model}, _HEART_BUNDLE)
+    logger.info("Heart model trained and saved.")
 
 def predict_heart_disease(input_data_dict):
     global preprocessor_transformer_heart, model_trained_heart

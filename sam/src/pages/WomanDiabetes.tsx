@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPersonPregnant, faBaby, faFileMedical, faInfoCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
-import Input from '../components/common/Input';
+import FormField from '../components/common/FormField';
 import Button from '../components/common/Button';
 import Toast from '../components/common/Toast';
 import { API_BASE_URL } from '../utils/api';
@@ -20,7 +20,8 @@ const INITIAL_STATE = {
     Insulin: '', BMI: '', DiabetesPedigreeFunction: '', Age: ''
 };
 
-const WomanDiabetes: React.FC = () => {
+const WomanDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
+
     const [inputData, setInputData] = useState(INITIAL_STATE);
     const [result, setResult] = useState<PredictionResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +52,20 @@ const WomanDiabetes: React.FC = () => {
             resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, [result]);
+
+    const getTooltip = (field: string) => {
+        const tooltips: Record<string, string> = {
+            Pregnancies: "Number of times the patient has been pregnant.",
+            Glucose: "Plasma glucose concentration at 2 hours in an oral glucose tolerance test (mg/dL).",
+            BloodPressure: "Diastolic blood pressure measurement (mm Hg).",
+            SkinThickness: "Triceps skin fold thickness measurement (mm), indicating subcutaneous fat.",
+            Insulin: "2-Hour serum insulin level (mu U/ml).",
+            BMI: "Body mass index (weight in kg / height in m²).",
+            DiabetesPedigreeFunction: "Diabetes pedigree function score, indicating genetic likelihood based on family history.",
+            Age: "Patient's chronological age in years."
+        };
+        return tooltips[field] || "";
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setInputData({ ...inputData, [e.target.name]: e.target.value });
@@ -104,7 +119,8 @@ const WomanDiabetes: React.FC = () => {
     };
 
     return (
-        <MainLayout isAuthenticated={true} onLogout={() => sessionStorage.removeItem('user_id')}>
+        <MainLayout isAuthenticated={true} onLogout={onLogout}>
+
             <div className="page-container">
                 {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
@@ -135,53 +151,48 @@ const WomanDiabetes: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* RIGHT: Form / Result */}
                         <div className="hero-form fade-in-left">
                             {!result ? (
-                                <Card className="form-card fixed-height-card">
-                                    <div className="card-header-area">
-                                        <h3 className="form-header">Health Metrics</h3>
+                                <Card className="fixed-height-card">
+                                    <div className="form-header-sticky">
+                                        <h3>Health Assessment</h3>
+                                        <p>Enter 8 metabolic and history markers</p>
                                     </div>
-                                    <div className="scrollable-form-box">
-                                        <form onSubmit={handleSubmit} className="compact-grid-form four-col">
-                                            {/* Row 1 */}
-                                            <div className="compact-input">
-                                                <Input label="Pregnancies" name="Pregnancies" type="number" value={inputData.Pregnancies} onChange={handleChange} required placeholder="#" />
+                                    <form onSubmit={handleSubmit} className="form-layout-container">
+                                        <div className="scrollable-form-box">
+                                            <div className="compact-grid-form three-col">
+                                                <div className="compact-input">
+                                                    <FormField label="Pregnancies" name="Pregnancies" type="number" tooltip={getTooltip('Pregnancies')} value={inputData.Pregnancies} onChange={handleChange} required placeholder="#" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Glucose" name="Glucose" type="number" tooltip={getTooltip('Glucose')} value={inputData.Glucose} onChange={handleChange} required placeholder="mg/dL" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Blood Pressure" name="BloodPressure" type="number" tooltip={getTooltip('BloodPressure')} value={inputData.BloodPressure} onChange={handleChange} required placeholder="mm Hg" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Skin Thickness" name="SkinThickness" type="number" tooltip={getTooltip('SkinThickness')} value={inputData.SkinThickness} onChange={handleChange} required placeholder="mm" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Insulin" name="Insulin" type="number" tooltip={getTooltip('Insulin')} value={inputData.Insulin} onChange={handleChange} required placeholder="mu U/ml" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="BMI" name="BMI" type="number" step="0.1" tooltip={getTooltip('BMI')} value={inputData.BMI} onChange={handleChange} required placeholder="Value" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Pedigree Func" name="DiabetesPedigreeFunction" type="number" step="0.01" tooltip={getTooltip('DiabetesPedigreeFunction')} value={inputData.DiabetesPedigreeFunction} onChange={handleChange} required placeholder="Value" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Age" name="Age" type="number" tooltip={getTooltip('Age')} value={inputData.Age} onChange={handleChange} required placeholder="Years" />
+                                                </div>
                                             </div>
-                                            <div className="compact-input">
-                                                <Input label="Glucose" name="Glucose" type="number" value={inputData.Glucose} onChange={handleChange} required placeholder="mg/dL" />
-                                            </div>
-
-                                            {/* Row 2 */}
-                                            <div className="compact-input">
-                                                <Input label="Blood Pressure" name="BloodPressure" type="number" value={inputData.BloodPressure} onChange={handleChange} required placeholder="mm Hg" />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Skin Thickness" name="SkinThickness" type="number" value={inputData.SkinThickness} onChange={handleChange} required placeholder="mm" />
-                                            </div>
-
-                                            {/* Row 3 */}
-                                            <div className="compact-input">
-                                                <Input label="Insulin" name="Insulin" type="number" value={inputData.Insulin} onChange={handleChange} required placeholder="mu U/ml" />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="BMI" name="BMI" type="number" step="0.1" value={inputData.BMI} onChange={handleChange} required placeholder="Value" />
-                                            </div>
-
-                                            {/* Row 4 */}
-                                            <div className="compact-input">
-                                                <Input label="Pedigree Func" name="DiabetesPedigreeFunction" type="number" step="0.01" value={inputData.DiabetesPedigreeFunction} onChange={handleChange} required placeholder="Value" />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Age" name="Age" type="number" value={inputData.Age} onChange={handleChange} required placeholder="Years" />
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div className="form-actions-fixed">
-                                        <Button type="submit" variant="primary" size="lg" isLoading={isLoading} className="w-full glow-button compact-btn">
-                                            Assess Risk
-                                        </Button>
-                                    </div>
+                                        </div>
+                                        <div className="form-actions-sticky">
+                                            <Button type="submit" variant="primary" size="lg" isLoading={isLoading} className="w-full glow-button compact-btn" style={{ fontSize: '1rem', padding: '0.6rem' }}>
+                                                Assess Risk
+                                            </Button>
+                                        </div>
+                                    </form>
                                 </Card>
                             ) : (
                                 <Card className="result-card fade-in-up" ref={resultRef as any}>
@@ -242,14 +253,14 @@ const WomanDiabetes: React.FC = () => {
                 .hero-wrapper { height: calc(100vh - 80px); max-height: calc(100vh - 80px); width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding: 2rem var(--spacing-lg) 0; overflow: hidden; }
                 .hero-split-container { display: flex; flex-direction: column; align-items: center; gap: 1rem; max-width: 1200px; width: 100%; margin: 0 auto; height: 100%; justify-content: center; }
                 
-                 /* ULTRA COMPACT INPUT OVERRIDES */
+                /* Form Inputs */
                 .compact-input input, .compact-input select {
-                    padding: 0.3rem 0.5rem !important; /* Tiny padding */
-                    font-size: 0.85rem !important;      /* Tiny font */
-                    height: 36px !important;            /* Fixed tiny height */
+                    padding: 0.3rem 0.5rem !important;
+                    font-size: 0.85rem !important;
+                    height: 36px !important; 
                     line-height: normal;
                     width: 100% !important;
-                    background: rgba(255, 255, 255, 0.05) !important; /* Increase visibility */
+                    background: rgba(255, 255, 255, 0.05) !important;
                     border: 1px solid rgba(255, 255, 255, 0.15) !important;
                     color: var(--text-main) !important;
                     border-radius: 6px !important;
@@ -260,19 +271,15 @@ const WomanDiabetes: React.FC = () => {
                      background: rgba(255, 255, 255, 0.1) !important;
                 }
                  .compact-input label {
-                    font-size: 0.75rem !important;      /* Tiny label */
+                    font-size: 0.75rem !important; 
                     margin-bottom: 0.25rem !important;
                     color: var(--text-secondary) !important;
                     display: block !important;
                     font-weight: 500 !important;
                 }
                 .compact-input > div { margin-bottom: 0 !important; width: 100% !important; }
-                .compact-input { display: flex; flex-direction: column; width: 100%; }
+                .compact-input { display: flex; flex-direction: column; width: 100%; height: 100%; }
 
-                .card-header-area { padding: 0.75rem 1.25rem 0.5rem; }
-                .scrollable-form-box { padding: 0.75rem 1.25rem; }
-                .form-actions-fixed { padding: 0.75rem 1.25rem; }
-                
                 @media (min-width: 1024px) {
                     .hero-split-container { 
                         flex-direction: row; 
@@ -308,26 +315,29 @@ const WomanDiabetes: React.FC = () => {
                     border: 1px solid rgba(255,255,255,0.1) !important;
                     display: flex;
                     flex-direction: column;
-                    height: auto;
-                    max-height: 650px;
+                    height: 600px;
+                    max-height: 80vh;
                     width: 100%;
                     overflow: hidden;
                     border-radius: 12px !important;
                 }
-                .card-header-area { padding: 1rem 1.5rem 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-                .form-header { margin: 0; font-size: 1.1rem; color: var(--text-main); }
+                .form-header-sticky { padding: 1.25rem 1.25rem 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgb(30, 41, 59); z-index: 10; }
+                .form-header-sticky h3 { margin: 0; font-size: 1.1rem; color: var(--text-main); }
+                .form-header-sticky p { margin: 0.25rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); }
+
+                .form-layout-container { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
                 .scrollable-form-box { padding: 1.25rem; overflow-y: auto; flex: 1; scrollbar-width: thin; scrollbar-color: var(--primary) rgba(255,255,255,0.1); }
                 .scrollable-form-box::-webkit-scrollbar {width: 6px; }
                 .scrollable-form-box::-webkit-scrollbar-track {background: rgba(255,255,255,0.05); }
                 .scrollable-form-box::-webkit-scrollbar-thumb {background-color: var(--primary); border-radius: 10px; }
                 
-                .form-actions-fixed { padding: 1rem 1.25rem; background: transparent; /* border-top: 1px solid rgba(255,255,255,0.05); */ }
+                .form-actions-sticky { padding: 1rem 1.25rem; background: rgba(30, 41, 59, 1); border-top: 1px solid rgba(255,255,255,0.1); z-index: 10; margin-top: auto; }
  
-                .compact-grid-form { display: grid; grid-template-columns: 1fr; gap: 0.75rem; width: 100%; }
-                .compact-grid-form.four-col { grid-template-columns: repeat(4, 1fr); }
-                @media (max-width: 1200px) { .compact-grid-form.four-col { grid-template-columns: repeat(3, 1fr); } }
-                @media (max-width: 992px) { .compact-grid-form.four-col { grid-template-columns: repeat(2, 1fr); } }
-                @media (max-width: 768px) { .compact-grid-form.four-col { grid-template-columns: 1fr; } }
+                .compact-grid-form { display: grid; grid-template-columns: 1fr; gap: 1.25rem 0.75rem; width: 100%; }
+                .compact-grid-form.three-col { grid-template-columns: repeat(3, 1fr); }
+                @media (max-width: 1024px) { .compact-grid-form.three-col { grid-template-columns: repeat(2, 1fr); } }
+                @media (max-width: 640px) { .compact-grid-form.three-col { grid-template-columns: 1fr; } }
 
                 @keyframes pulse-ring { 0% { transform: scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: scale(1.5); opacity: 0; } }
                 @keyframes float-icon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }

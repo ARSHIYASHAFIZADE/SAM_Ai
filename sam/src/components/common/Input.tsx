@@ -21,7 +21,8 @@ const Input: React.FC<InputProps> = ({
     const containerStyle: React.CSSProperties = {
         display: 'flex',
         flexDirection: 'column',
-        marginBottom: 'var(--spacing-md)',
+        justifyContent: 'flex-end',
+        height: '100%',
         fontFamily: 'var(--font-main)',
     };
 
@@ -29,7 +30,8 @@ const Input: React.FC<InputProps> = ({
         display: 'flex',
         alignItems: 'center',
         gap: '0.375rem',
-        marginBottom: 'var(--spacing-sm)',
+        marginBottom: '0.75rem',
+        marginTop: 'auto', // Pushes label down if container grows
     };
 
     const labelStyle: React.CSSProperties = {
@@ -53,7 +55,9 @@ const Input: React.FC<InputProps> = ({
 
     const inputStyle: React.CSSProperties = {
         width: '100%',
-        padding: 'var(--spacing-sm) var(--spacing-md)',
+        height: '48px',
+        boxSizing: 'border-box',
+        padding: '0 var(--spacing-md)',
         paddingLeft: icon ? '2.75rem' : 'var(--spacing-md)',
         background: 'var(--surface-light)',
         border: error ? '1.5px solid var(--danger)' : '1px solid rgba(255, 255, 255, 0.1)',

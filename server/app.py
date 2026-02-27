@@ -1,41 +1,49 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
+from flask_wtf.csrf import CSRFProtect
 from config import ApplicationConfig
 from models import db
-from extensions import bcrypt, server_session, mail
+from extensions import bcrypt, server_session, mail, limiter
 from routes.auth_routes import auth_bp
 from routes.predict_routes import predict_bp
+from utils import configure_logging
+from ml_models import set_model_ready, all_models_ready, MODEL_VERSION
 import os
 import logging
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
+# Fix 5: Structured JSON logging configured before anything else
+configure_logging()
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
 
+# Fix 2: CSRF protection (exempt JSON API endpoints via custom header check below)
+csrf = CSRFProtect(app)
+
+# Exempt all API blueprints from CSRF token requirement —
+# protection is provided by SameSite cookie + CORS allowlist instead.
+# For a pure JSON API (no HTML forms served), this is the correct approach.
+csrf.exempt(auth_bp)
+csrf.exempt(predict_bp)
+
 # Initialize Extensions
-# Important: DB init must happen here with app
 db.init_app(app)
 bcrypt.init_app(app)
 server_session.init_app(app)
+limiter.init_app(app)
 
-# Mail Config (Manual init if config not picked up automatically by init_app?)
-# Flask-Mail init_app(app) usually works if config is set on app.
-# User's original code set config manually then called Mail(app).
-# ApplicationConfig should have the mail settings.
-# Let's verify if they are in config.py. If not, we set them here.
+# Fix 1: Mail credentials from env only
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'a6833351@gmail.com'
-app.config['MAIL_PASSWORD'] = 'fxfm lfzl gwme oohz'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_DEFAULT_SENDER'] = 'a6833351@gmail.com'
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER')
 mail.init_app(app)
 
-# CORS
+# CORS — restrict to known origins
 allowed_origins = [
     "https://sam-ai-theta.vercel.app",
     "https://sam-ai-7lwa.onrender.com",
@@ -46,7 +54,7 @@ allowed_origins = [
     "http://127.0.0.1:10000"
 ]
 
-CORS(app, 
+CORS(app,
      resources={r"/*": {"origins": allowed_origins}},
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization"],
@@ -57,12 +65,10 @@ def handle_preflight():
     if request.method == "OPTIONS":
         response = app.make_response("")
         origin = request.headers.get('Origin')
-        allowed_origins = ["https://sam-ai-7lwa.onrender.com", "http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5173", "http://localhost:10000", "http://127.0.0.1:10000"]
         if origin in allowed_origins:
             response.headers.add("Access-Control-Allow-Origin", origin)
         else:
-            response.headers.add("Access-Control-Allow-Origin", "https://sam-ai-theta.vercel.app")
-            
+            response.headers.add("Access-Control-Allow-Origin", allowed_origins[0])
         response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
         response.headers.add("Access-Control-Allow-Credentials", "true")
@@ -70,6 +76,28 @@ def handle_preflight():
 
 with app.app_context():
     db.create_all()
+
+    # Fix 6 (from previous): Eager model training at startup
+    logger.info("Training ML models at startup...")
+    try:
+        from services.diabetes_service import preprocess_female_diabetes, preprocess_male_diabetes
+        from services.heart_service import train_heart_model
+        from services.liver_service import train_liver_model
+        from services.cancer_service import train_cancer_model
+
+        preprocess_female_diabetes()
+        set_model_ready("female_diabetes")
+        preprocess_male_diabetes()
+        set_model_ready("male_diabetes")
+        train_heart_model()
+        set_model_ready("heart")
+        train_liver_model()
+        set_model_ready("liver")
+        train_cancer_model()
+        set_model_ready("cancer")
+        logger.info("All ML models ready.")
+    except Exception as e:
+        logger.error("Model training at startup failed: %s", e)
 
 # Register Blueprints
 app.register_blueprint(auth_bp)
@@ -84,5 +112,25 @@ def test_redis():
     session['test'] = 'Redis working!'
     return jsonify({"message": session.get('test', 'Failed to set session')})
 
+
+@app.route('/healthz')
+def healthz():
+    status = {"model_version": MODEL_VERSION, "models_ready": all_models_ready()}
+    try:
+        db.session.execute(db.text('SELECT 1'))
+        status["db"] = "ok"
+    except Exception as e:
+        logger.error("DB health check failed: %s", e)
+        status["db"] = "error"
+    ok = status["models_ready"] and status["db"] == "ok"
+    return jsonify(status), (200 if ok else 503)
+
+
+@app.route('/csrf-token', methods=['GET'])
+def get_csrf_token():
+    from flask_wtf.csrf import generate_csrf
+    token = generate_csrf()
+    return jsonify({'csrf_token': token})
+
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

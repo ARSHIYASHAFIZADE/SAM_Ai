@@ -10,10 +10,10 @@ const AboutPage: React.FC = () => {
                 {/* Hero Section */}
                 <section className="about-hero">
                     <div className="hero-content">
-                        <h1>Revolutionizing <span className="text-gradient">Healthcare</span></h1>
+                        <h1>Applied AI & <span className="text-gradient">Engineering Platform</span></h1>
                         <p className="hero-subtitle">
-                            SAM AI combines advanced machine learning with medical expertise to provide
-                            early, accurate, and accessible disease detection for everyone.
+                            SAM AI is a full-stack technical demonstration showcasing end-to-end machine learning integration. 
+                            It provides predictive risk models for educational and system architecture evaluation purposes, not as medical advice.
                         </p>
                     </div>
                 </section>
@@ -22,19 +22,17 @@ const AboutPage: React.FC = () => {
                 <section className="mission-section">
                     <div className="grid-container">
                         <Card className="mission-card">
-                            <h3>Our Mission</h3>
+                            <h3>Technical Objective</h3>
                             <p>
-                                To democratize access to high-quality healthcare diagnostics by leveraging
-                                artificial intelligence. We believe that early detection is key to saving lives,
-                                and technology bridges the gap between symptoms and diagnosis.
+                                To build robust, scalable architectures that bridge machine learning capabilities with an interactive frontend application. 
+                                This project demonstrates best practices in REST API design, strict type safety, data formatting, and responsive UX engineering.
                             </p>
                         </Card>
                         <Card className="mission-card">
-                            <h3>Our Vision</h3>
+                            <h3>System Architecture</h3>
                             <p>
-                                A world where preventable diseases are caught in their earliest stages,
-                                reducing treatment costs and improving patient outcomes globally through
-                                intelligent, data-driven insights.
+                                A decoupled, service-oriented ecosystem utilizing Python/Flask endpoints to serve pre-trained scikit-learn models. 
+                                The inference pipeline ensures low-latency predictions, strict form payload validation, and programmatic report generation.
                             </p>
                         </Card>
                     </div>
@@ -43,40 +41,46 @@ const AboutPage: React.FC = () => {
                 {/* Technology Section */}
                 <section className="tech-section">
                     <div className="tech-content">
-                        <h2>Powered by <span className="text-highlight">State-of-the-Art AI</span></h2>
+                        <h2>Powered by <span className="text-highlight">Predictive Modeling</span></h2>
                         <p>
-                            Our platform utilizes cutting-edge algorithms including Gradient Boosting Classifiers,
-                            Neural Networks, and Logistic Regression models. Trained on thousands of validated
-                            medical datasets, SAM AI delivers probability-based risk assessments you can trust.
+                            The backend services utilize structured machine learning models, including Gradient Boosting and Logistic Regression, 
+                            trained on publicly available datasets. The prediction pipelines handle data normalization, outlier detection, 
+                            and probability scoring over a secure REST API. 
+                            <br /><br />
+                            <small style={{ color: "var(--text-muted)" }}>
+                                <em>Disclaimer: This application is a technical portfolio project built for software engineering demonstration. It is not intended for medical diagnosis.</em>
+                            </small>
                         </p>
                         <div className="tech-stats">
                             <div className="stat-item">
-                                <span className="stat-number">95%+</span>
-                                <span className="stat-label">Accuracy Rate</span>
+                                <span className="stat-number">React+TS</span>
+                                <span className="stat-label">Frontend</span>
                             </div>
                             <div className="stat-item">
-                                <span className="stat-number">5+</span>
-                                <span className="stat-label">Disease Models</span>
+                                <span className="stat-number">Python</span>
+                                <span className="stat-label">Backend</span>
                             </div>
                             <div className="stat-item">
-                                <span className="stat-number">24/7</span>
-                                <span className="stat-label">Availability</span>
+                                <span className="stat-number">E2E</span>
+                                <span className="stat-label">Ownership</span>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Team Section (Placeholder) */}
+                {/* Team Section */}
                 <section className="team-section">
-                    <h2>Meet the <span className="text-gradient">Team</span></h2>
+                    <h2>Engineering <span className="text-gradient">Leadership</span></h2>
                     <div className="team-grid">
                         <Card className="team-card">
                             <div className="avatar-placeholder">AS</div>
                             <h4>Arshiya Shafizade</h4>
-                            <span className="role">Lead Developer & Researcher</span>
-                            <p>Driving the technical vision and AI model development.</p>
+                            <span className="role">Software Engineer</span>
+                            <p>
+                                Sole developer and architect of SAM AI. Responsible for end-to-end delivery: 
+                                from React frontend design to Flask backend development, ML integration, deployment, and structural QA.
+                            </p>
                         </Card>
-                        {/* Add more team members here */}
                     </div>
                 </section>
             </div>

@@ -18,8 +18,13 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import joblib
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+_MODELS_DIR = Path("saved_models")
+_CANCER_BUNDLE = _MODELS_DIR / "cancer_bundle.pkl"
 
 scaler_breast_cancer = None
 model_breast_cancer = None
@@ -27,7 +32,13 @@ X_shape_1 = 30 # Default
 
 def train_cancer_model():
     global scaler_breast_cancer, model_breast_cancer, X_shape_1
-    
+    _MODELS_DIR.mkdir(exist_ok=True)
+    if _CANCER_BUNDLE.exists():
+        b = joblib.load(_CANCER_BUNDLE)
+        scaler_breast_cancer, model_breast_cancer, X_shape_1 = b["scaler"], b["model"], b["X_shape_1"]
+        logger.info("Cancer model loaded from disk.")
+        return
+
     Breast_Cancer_DS = load_breast_cancer()
     df = pd.DataFrame(Breast_Cancer_DS.data, columns=Breast_Cancer_DS.feature_names)
     df['diagnosis'] = Breast_Cancer_DS.target
@@ -44,6 +55,8 @@ def train_cancer_model():
     LR.fit(x_scaled_tr, y_train)
     
     model_breast_cancer = LR
+    joblib.dump({"scaler": scaler_breast_cancer, "model": model_breast_cancer, "X_shape_1": X_shape_1}, _CANCER_BUNDLE)
+    logger.info("Cancer model trained and saved.")
 
 def predict_breast_cancer(input_data_):
     if model_breast_cancer is None:

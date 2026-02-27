@@ -2,6 +2,10 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from './utils/api';
 import styles from './BreastCancerDetection.module.css';
+import FormGrid from './components/common/FormGrid';
+import FormField from './components/common/FormField';
+import Input from './components/common/Input';
+import SectionTitle from './components/common/SectionTitle';
 
 interface InputData {
     [key: string]: string;
@@ -11,6 +15,8 @@ interface PredictionResult {
     prediction: number;
     probability_breast_cancer: string;
 }
+
+const formatLabel = (key: string) => key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
 const BreastCancerDetection: React.FC = () => {
     const [inputData, setInputData] = useState<InputData>({
@@ -97,24 +103,68 @@ const BreastCancerDetection: React.FC = () => {
 
             {/* Form Container */}
             <div className={`${styles.bc_formContainer} ${blur ? styles.blur : ''}`}>
-                <h1 className={styles.bc_h1}>Breast Cancer Detection</h1>
+                <h1 className={styles.bc_h1} style={{ marginBottom: '2rem' }}>Breast Cancer Detection</h1>
                 <form onSubmit={handleSubmit}>
-                    {Object.keys(inputData).map((key) => (
-                        <div className={styles.bc_formGroup} key={key}>
-                            <label htmlFor={key} className={styles.bc_label}>{key.replace(/_/g, ' ')}:</label>
-                            <input
-                                type="number"
-                                id={key}
-                                name={key}
-                                placeholder={`Enter ${key.replace(/_/g, ' ')}`}
-                                value={inputData[key]}
-                                onChange={handleChange}
-                                required
-                                className={styles.bc_input}
-                            />
-                        </div>
-                    ))}
-                    <button type="submit" className={styles.bc_submitBtn}>Submit</button>
+                    <FormGrid>
+                        <SectionTitle title="Mean Characteristics" />
+                        {Object.keys(inputData).filter(k => k.startsWith('mean_')).map((key) => (
+                            <FormField key={key}>
+                                <Input
+                                    label={formatLabel(key)}
+                                    type="number"
+                                    id={key}
+                                    name={key}
+                                    placeholder={`Enter ${key.replace(/_/g, ' ')}`}
+                                    value={inputData[key]}
+                                    onChange={handleChange}
+                                    required
+                                    step="any"
+                                    tooltip={`Mean measurement for ${formatLabel(key.replace('mean_', '')).toLowerCase()}.`}
+                                />
+                            </FormField>
+                        ))}
+                        
+                        <SectionTitle title="Error Characteristics" />
+                        {Object.keys(inputData).filter(k => k.includes('_error')).map((key) => (
+                            <FormField key={key}>
+                                <Input
+                                    label={formatLabel(key)}
+                                    type="number"
+                                    id={key}
+                                    name={key}
+                                    placeholder={`Enter ${key.replace(/_/g, ' ')}`}
+                                    value={inputData[key]}
+                                    onChange={handleChange}
+                                    required
+                                    step="any"
+                                    tooltip={`Standard error for ${formatLabel(key.replace('_error', '')).toLowerCase()}.`}
+                                />
+                            </FormField>
+                        ))}
+
+                        <SectionTitle title="Worst Characteristics" />
+                        {Object.keys(inputData).filter(k => k.startsWith('worst_')).map((key) => (
+                            <FormField key={key}>
+                                <Input
+                                    label={formatLabel(key)}
+                                    type="number"
+                                    id={key}
+                                    name={key}
+                                    placeholder={`Enter ${key.replace(/_/g, ' ')}`}
+                                    value={inputData[key]}
+                                    onChange={handleChange}
+                                    required
+                                    step="any"
+                                    tooltip={`Worst/largest measurement for ${formatLabel(key.replace('worst_', '')).toLowerCase()}.`}
+                                />
+                            </FormField>
+                        ))}
+
+                        <FormField fullWidth>
+                            <button type="submit" className="medical-submit-btn" style={{ marginBottom: '2rem' }}>Submit</button>
+                        </FormField>
+                    </FormGrid>
+
                 </form>
             </div>
 
@@ -129,7 +179,6 @@ const BreastCancerDetection: React.FC = () => {
                     <button onClick={handleCancel} className={styles.bc_cancelBtn}>Cancel</button>
                 </div>
             )}
-
 
             {/* Error Card */}
             {error && (

@@ -3,15 +3,26 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split as tts
 from sklearn.ensemble import GradientBoostingClassifier
+import joblib
+from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
+
+_MODELS_DIR = Path("saved_models")
+_LIVER_BUNDLE = _MODELS_DIR / "liver_bundle.pkl"
 
 gbm_model_liver = None
 scaler_liver = None
 
 def train_liver_model():
     global gbm_model_liver, scaler_liver
+    _MODELS_DIR.mkdir(exist_ok=True)
+    if _LIVER_BUNDLE.exists():
+        b = joblib.load(_LIVER_BUNDLE)
+        gbm_model_liver, scaler_liver = b["model"], b["scaler"]
+        logger.info("Liver model loaded from disk.")
+        return
     # Use local file path relative to this service file? 
     # Current dir: server/services. File: server/liver/data.csv
     # Better to use absolute or relative to 'server' root if run from app.py.
@@ -55,6 +66,8 @@ def train_liver_model():
     
     gbm_model_liver = gbm_model
     scaler_liver = scaler
+    joblib.dump({"model": gbm_model, "scaler": scaler}, _LIVER_BUNDLE)
+    logger.info("Liver model trained and saved.")
 
 def predict_liver_health(input_data):
     if gbm_model_liver is None:

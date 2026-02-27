@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from './utils/api';
 import styles from './HeartDisease.module.css';
+import FormGrid from './components/common/FormGrid';
+import FormField from './components/common/FormField';
+import Input from './components/common/Input';
+import Select from './components/common/Select';
+import SectionTitle from './components/common/SectionTitle';
 
 interface PredictionResult {
     prediction: number;
     probability: string; 
 }
-
 
 const HeartDisease: React.FC = () => {
     const [inputData, setInputData] = useState({
@@ -32,7 +36,7 @@ const HeartDisease: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setInputData({
             ...inputData,
-            [e.target.name]: e.target.value
+            [e.target.name as keyof typeof inputData]: e.target.value
         });
     };
 
@@ -72,185 +76,61 @@ const HeartDisease: React.FC = () => {
     return (
         <div className={styles.formWrapper}>
             <div className={`${styles.container} ${blur ? styles.blur : ''}`}>
-                <h1>Heart Disease Detection</h1>
+                <h1 style={{ marginBottom: '2rem' }}>Heart Disease Detection</h1>
                 <form id="heartDiseaseForm" onSubmit={handleSubmit}>
-                    {/* Form fields */}
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Age">Age:</label>
-                        <input
-                            type="number"
-                            id="Age"
-                            name="age"
-                            placeholder="Age"
-                            value={inputData.age}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Sex">Sex:</label>
-                        <select
-                            id="Sex"
-                            name="sex"
-                            value={inputData.sex}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Sex</option>
-                            <option value="0">Female</option>
-                            <option value="1">Male</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="ChestPain">Chest Pain Type:</label>
-                        <select
-                            id="ChestPain"
-                            name="cp"
-                            value={inputData.cp}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Chest Pain Type</option>
-                            <option value="1">Typical Angina</option>
-                            <option value="2">Atypical Angina</option>
-                            <option value="3">Non-Anginal Pain</option>
-                            <option value="4">Asymptomatic</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="RestingBP">Resting Blood Pressure:</label>
-                        <input
-                            type="number"
-                            id="RestingBP"
-                            name="trestbps"
-                            placeholder="Resting Blood Pressure"
-                            value={inputData.trestbps}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Cholesterol">Serum Cholesterol:</label>
-                        <input
-                            type="number"
-                            id="Cholesterol"
-                            name="chol"
-                            placeholder="Serum Cholesterol"
-                            value={inputData.chol}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="FastingBS">Fasting Blood Sugar:</label>
-                        <select
-                            id="FastingBS"
-                            name="fbs"
-                            value={inputData.fbs}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Fasting Blood Sugar</option>
-                            <option value="0">Less than 120 mg/dl</option>
-                            <option value="1">Greater than 120 mg/dl</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="RestingECG">Resting ECG:</label>
-                        <select
-                            id="RestingECG"
-                            name="restecg"
-                            value={inputData.restecg}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Resting ECG Result</option>
-                            <option value="0">Normal</option>
-                            <option value="1">Having ST-T Wave Abnormality</option>
-                            <option value="2">Showing Probable or Definite Left Ventricular Hypertrophy</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="MaxHR">Maximum Heart Rate:</label>
-                        <input
-                            type="number"
-                            id="MaxHR"
-                            name="thalach"
-                            placeholder="Maximum Heart Rate"
-                            value={inputData.thalach}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="ExerciseAngina">Exercise Induced Angina:</label>
-                        <select
-                            id="ExerciseAngina"
-                            name="exang"
-                            value={inputData.exang}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Exercise Induced Angina</option>
-                            <option value="0">No</option>
-                            <option value="1">Yes</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Oldpeak">Oldpeak:</label>
-                        <input
-                            type="number"
-                            id="Oldpeak"
-                            name="oldpeak"
-                            placeholder="Oldpeak"
-                            value={inputData.oldpeak}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Slope">Slope of Peak Exercise ST Segment:</label>
-                        <select
-                            id="Slope"
-                            name="slope"
-                            value={inputData.slope}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Slope</option>
-                            <option value="1">Upsloping</option>
-                            <option value="2">Flat</option>
-                            <option value="3">Downsloping</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="CA">Number of Major Vessels:</label>
-                        <input
-                            type="number"
-                            id="CA"
-                            name="ca"
-                            placeholder="Number of Major Vessels"
-                            value={inputData.ca}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Thal">Thalassemia:</label>
-                        <select
-                            id="Thal"
-                            name="thal"
-                            value={inputData.thal}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Thalassemia</option>
-                            <option value="3">Normal</option>
-                            <option value="6">Fixed Defect</option>
-                            <option value="7">Reversible Defect</option>
-                        </select>
-                    </div>
-                    <button type="submit" className={styles.submitBtn}>Submit</button>
+                    <FormGrid>
+                        <SectionTitle title="Demographics" />
+                        <FormField>
+                            <Input label="Age" type="number" id="Age" name="age" placeholder="Years" value={inputData.age} onChange={handleChange} required tooltip="Patient's age in years." />
+                        </FormField>
+                        <FormField>
+                            <Select label="Sex" id="Sex" name="sex" value={inputData.sex} onChange={handleChange} required options={[{ value: '0', label: 'Female' }, { value: '1', label: 'Male' }]} tooltip="Patient's biological sex." />
+                        </FormField>
+
+                        <SectionTitle title="Symptoms" />
+                        <FormField>
+                            <Select label="Chest Pain Type" id="ChestPain" name="cp" value={inputData.cp} onChange={handleChange} required options={[{ value: '1', label: 'Typical Angina' }, { value: '2', label: 'Atypical Angina' }, { value: '3', label: 'Non-Anginal Pain' }, { value: '4', label: 'Asymptomatic' }]} tooltip="Type of chest pain experienced." />
+                        </FormField>
+                        <FormField>
+                            <Select label="Exercise Induced Angina" id="ExerciseAngina" name="exang" value={inputData.exang} onChange={handleChange} required options={[{ value: '0', label: 'No' }, { value: '1', label: 'Yes' }]} tooltip="Angina induced by exercise?" />
+                        </FormField>
+
+                        <SectionTitle title="Vitals & Labs" />
+                        <FormField>
+                            <Input label="Resting BP" type="number" id="RestingBP" name="trestbps" placeholder="mm Hg" value={inputData.trestbps} onChange={handleChange} required tooltip="Resting blood pressure in mm Hg." />
+                        </FormField>
+                        <FormField>
+                            <Input label="Cholesterol" type="number" id="Cholesterol" name="chol" placeholder="mg/dl" value={inputData.chol} onChange={handleChange} required tooltip="Serum cholesterol in mg/dl." />
+                        </FormField>
+                        <FormField>
+                            <Select label="Fasting BS > 120 mg/dl" id="FastingBS" name="fbs" value={inputData.fbs} onChange={handleChange} required options={[{ value: '0', label: 'No (< 120 mg/dl)' }, { value: '1', label: 'Yes (> 120 mg/dl)' }]} tooltip="Fasting blood sugar > 120 mg/dl." />
+                        </FormField>
+                        <FormField>
+                            <Input label="Max Heart Rate" type="number" id="MaxHR" name="thalach" placeholder="bpm" value={inputData.thalach} onChange={handleChange} required tooltip="Maximum heart rate achieved." />
+                        </FormField>
+
+                        <SectionTitle title="Diagnostic Tests & Risk Factors" />
+                        <FormField>
+                            <Select label="Resting ECG" id="RestingECG" name="restecg" value={inputData.restecg} onChange={handleChange} required options={[{ value: '0', label: 'Normal' }, { value: '1', label: 'Having ST-T Wave Abnormality' }, { value: '2', label: 'Showing Probable or Definite Left Ventricular Hypertrophy' }]} tooltip="Resting electrocardiographic results." />
+                        </FormField>
+                        <FormField>
+                            <Input label="ST Depression (Oldpeak)" type="number" id="Oldpeak" name="oldpeak" placeholder="e.g., 2.3" value={inputData.oldpeak} onChange={handleChange} required tooltip="ST depression induced by exercise relative to rest." />
+                        </FormField>
+                        <FormField>
+                            <Select label="Slope of Peak Exercise ST Segment" id="Slope" name="slope" value={inputData.slope} onChange={handleChange} required options={[{ value: '1', label: 'Upsloping' }, { value: '2', label: 'Flat' }, { value: '3', label: 'Downsloping' }]} tooltip="The slope of the peak exercise ST segment." />
+                        </FormField>
+                        <FormField>
+                            <Input label="Major Vessels Configured" type="number" id="CA" name="ca" placeholder="0 to 3" value={inputData.ca} onChange={handleChange} required tooltip="Number of major vessels (0-3) colored by fluoroscopy." />
+                        </FormField>
+                        <FormField fullWidth>
+                            <Select label="Thalassemia" id="Thal" name="thal" value={inputData.thal} onChange={handleChange} required options={[{ value: '3', label: 'Normal' }, { value: '6', label: 'Fixed Defect' }, { value: '7', label: 'Reversible Defect' }]} tooltip="Thalassemia result." />
+                        </FormField>
+
+                        <FormField fullWidth>
+                            <button type="submit" className="medical-submit-btn">Submit</button>
+                        </FormField>
+                    </FormGrid>
+
                 </form>
             </div>
             {result && (
@@ -261,7 +141,6 @@ const HeartDisease: React.FC = () => {
                     <button onClick={handleCancel} className={styles.cancelBtn}>Cancel</button>
                 </div>
             )}
-
         </div>
     );
 };

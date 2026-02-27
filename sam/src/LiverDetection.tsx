@@ -2,6 +2,11 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from './utils/api';
 import styles from './LiverDetection.module.css';
+import FormGrid from './components/common/FormGrid';
+import FormField from './components/common/FormField';
+import Input from './components/common/Input';
+import Select from './components/common/Select';
+import SectionTitle from './components/common/SectionTitle';
 
 interface PredictionResult {
     prediction: number; 
@@ -29,7 +34,7 @@ const LiverDetection: React.FC = () => {
         const { name, value } = e.target;
         setInputData({
             ...inputData,
-            [name]: value
+            [name as keyof typeof inputData]: value
         });
     };
 
@@ -82,143 +87,52 @@ const LiverDetection: React.FC = () => {
     return (
         <div className={styles.formWrapper}>
             <div className={`${styles.container} ${blur ? styles.blur : ''}`}>
-                <h1>Liver Health Detection</h1>
+                <h1 style={{ marginBottom: '2rem' }}>Liver Health Detection</h1>
                 <form id="liverForm" onSubmit={handleSubmit}>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Age">Age:</label>
-                        <input
-                            type="number"
-                            id="Age"
-                            name="Age"
-                            placeholder="Age"
-                            value={inputData.Age}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Gender">Gender:</label>
-                        <select
-                            id="Gender"
-                            name="Gender"
-                            value={inputData.Gender}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Gender</option>
-                            <option value="0">Male</option>
-                            <option value="1">Female</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="BMI">BMI:</label>
-                        <input
-                            type="number"
-                            id="BMI"
-                            name="BMI"
-                            step="0.01"
-                            placeholder="BMI (e.g., 22.5)"
-                            value={inputData.BMI}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="AlcoholConsumption">Alcohol Consumption:</label>
-                        <input
-                            type="number"
-                            id="AlcoholConsumption"
-                            name="AlcoholConsumption"
-                            step="0.01"
-                            placeholder="Alcohol Consumption (Units/Week)"
-                            value={inputData.AlcoholConsumption}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Smoking">Smoking Status:</label>
-                        <select
-                            id="Smoking"
-                            name="Smoking"
-                            value={inputData.Smoking}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Status</option>
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="GeneticRisk">Genetic Risk:</label>
-                        <select
-                            id="GeneticRisk"
-                            name="GeneticRisk"
-                            value={inputData.GeneticRisk}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Risk Level</option>
-                            <option value="0">Low</option>
-                            <option value="1">Medium</option>
-                            <option value="2">High</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="PhysicalActivity">Physical Activity (Hrs/Week):</label>
-                        <input
-                            type="number"
-                            id="PhysicalActivity"
-                            name="PhysicalActivity"
-                            step="0.01"
-                            placeholder="Physical Activity"
-                            value={inputData.PhysicalActivity}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Diabetes">Diabetes Status:</label>
-                        <select
-                            id="Diabetes"
-                            name="Diabetes"
-                            value={inputData.Diabetes}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">Select Status</option>
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="Cholesterol">Cholesterol Level:</label>
-                        <input
-                            type="number"
-                            id="Cholesterol"
-                            name="Cholesterol"
-                            step="0.01"
-                            placeholder="Cholesterol"
-                            value={inputData.Cholesterol}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label htmlFor="LiverFunctionTest">Liver Function Test Score:</label>
-                        <input
-                            type="number"
-                            id="LiverFunctionTest"
-                            name="LiverFunctionTest"
-                            step="0.01"
-                            placeholder="Liver Function Test"
-                            value={inputData.LiverFunctionTest}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <button type="submit" className={styles.submitBtn}>Submit</button>
+                    <FormGrid>
+                        <SectionTitle title="Demographics" />
+                        <FormField>
+                            <Input label="Age" type="number" id="Age" name="Age" placeholder="Years" value={inputData.Age} onChange={handleChange} required tooltip="Patient's age in years." />
+                        </FormField>
+                        <FormField>
+                            <Select label="Gender" id="Gender" name="Gender" value={inputData.Gender} onChange={handleChange} required options={[{ value: '0', label: 'Male' }, { value: '1', label: 'Female' }]} tooltip="Patient's biological sex." />
+                        </FormField>
+
+                        <SectionTitle title="Lifestyle & Measurements" />
+                        <FormField>
+                            <Input label="BMI (Body Mass Index)" type="number" id="BMI" name="BMI" step="0.01" placeholder="BMI (e.g., 22.5)" value={inputData.BMI} onChange={handleChange} required tooltip="Body Mass Index." />
+                        </FormField>
+                        <FormField>
+                            <Input label="Physical Activity" type="number" id="PhysicalActivity" name="PhysicalActivity" step="0.01" placeholder="Hours/Week" value={inputData.PhysicalActivity} onChange={handleChange} required tooltip="Hours of physical activity per week." />
+                        </FormField>
+                        <FormField>
+                            <Input label="Alcohol Consumption" type="number" id="AlcoholConsumption" name="AlcoholConsumption" step="0.01" placeholder="Units/Week" value={inputData.AlcoholConsumption} onChange={handleChange} required tooltip="Alcohol consumption in units per week." />
+                        </FormField>
+                        <FormField>
+                            <Select label="Smoking History" id="Smoking" name="Smoking" value={inputData.Smoking} onChange={handleChange} required options={[{ value: '1', label: 'Yes' }, { value: '0', label: 'No' }]} tooltip="History of smoking." />
+                        </FormField>
+
+                        <SectionTitle title="Medical History" />
+                        <FormField>
+                            <Select label="Genetic Risk Level" id="GeneticRisk" name="GeneticRisk" value={inputData.GeneticRisk} onChange={handleChange} required options={[{ value: '0', label: 'Low' }, { value: '1', label: 'Medium' }, { value: '2', label: 'High' }]} tooltip="Assessment of genetic risk based on family history." />
+                        </FormField>
+                        <FormField>
+                            <Select label="Diabetes Status" id="Diabetes" name="Diabetes" value={inputData.Diabetes} onChange={handleChange} required options={[{ value: '1', label: 'Yes' }, { value: '0', label: 'No' }]} tooltip="Does the patient have diabetes?" />
+                        </FormField>
+
+                        <SectionTitle title="Lab Values" />
+                        <FormField>
+                            <Input label="Cholesterol Level" type="number" id="Cholesterol" name="Cholesterol" step="0.01" placeholder="mg/dl" value={inputData.Cholesterol} onChange={handleChange} required tooltip="Serum cholesterol levels in mg/dl." />
+                        </FormField>
+                        <FormField>
+                            <Input label="Liver Function Score" type="number" id="LiverFunctionTest" name="LiverFunctionTest" step="0.01" placeholder="e.g., 1.2" value={inputData.LiverFunctionTest} onChange={handleChange} required tooltip="Standardized liver function test score." />
+                        </FormField>
+
+                        <FormField fullWidth>
+                            <button type="submit" className="medical-submit-btn">Submit</button>
+                        </FormField>
+                    </FormGrid>
+
                 </form>
             </div>
             {result && (

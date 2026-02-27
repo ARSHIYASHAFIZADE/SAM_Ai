@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlask, faVial, faNotesMedical, faInfoCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
-import Input from '../components/common/Input';
-import Select from '../components/common/Select';
+import FormField from '../components/common/FormField';
+import FormSelect from '../components/common/FormSelect';
 import Button from '../components/common/Button';
 import Toast from '../components/common/Toast';
 import { API_BASE_URL } from '../utils/api';
@@ -22,7 +22,8 @@ const INITIAL_STATE = {
     Total_Protiens: '', Albumin: '', Albumin_and_Globulin_Ratio: ''
 };
 
-const LiverDetection: React.FC = () => {
+const LiverDetection: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
+
     const [inputData, setInputData] = useState(INITIAL_STATE);
     const [result, setResult] = useState<PredictionResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +60,22 @@ const LiverDetection: React.FC = () => {
             resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, [result]);
+
+    const getTooltip = (field: string) => {
+        const tooltips: Record<string, string> = {
+            Age: "Patient's chronological age in years.",
+            Gender: "Biological sex of the patient.",
+            Total_Bilirubin: "Total amount of bilirubin in the blood (mg/dL), an indicator of liver or bile duct function.",
+            Direct_Bilirubin: "Amount of conjugated (direct) bilirubin in the blood (mg/dL).",
+            Alkaline_Phosphotase: "ALP enzyme level (IU/L); elevated levels can indicate liver disease or blocked bile ducts.",
+            Alamine_Aminotransferase: "ALT enzyme level (IU/L); commonly elevated when the liver is damaged.",
+            Aspartate_Aminotransferase: "AST enzyme level (IU/L); indicates liver or muscle damage.",
+            Total_Protiens: "Total amount of protein in the blood (g/dL), mostly albumin and globulins.",
+            Albumin: "Amount of albumin protein in the blood (g/dL), essential for maintaining oncotic pressure.",
+            Albumin_and_Globulin_Ratio: "A/G ratio, the calculated ratio of albumin to globulin proteins."
+        };
+        return tooltips[field] || "";
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setInputData({ ...inputData, [e.target.name]: e.target.value });
@@ -110,7 +127,8 @@ const LiverDetection: React.FC = () => {
     };
 
     return (
-        <MainLayout isAuthenticated={true} onLogout={() => sessionStorage.removeItem('user_id')}>
+        <MainLayout isAuthenticated={true} onLogout={onLogout}>
+
             <div className="page-container">
                 {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
@@ -141,53 +159,58 @@ const LiverDetection: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* RIGHT: Form / Result */}
                         <div className="hero-form fade-in-left">
                             {!result ? (
                                 <Card className="fixed-height-card">
-                                    <div className="scrollable-form-box">
-                                        <form onSubmit={handleSubmit} className="compact-grid-form four-col">
-                                            <div className="compact-input">
-                                                <Input label="Age" name="Age" type="number" value={inputData.Age} onChange={handleChange} required placeholder="Years" />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Select label="Gender" name="Gender" value={inputData.Gender} onChange={handleChange} options={[
-                                                    { value: "0", label: "Male" },
-                                                    { value: "1", label: "Female" }
-                                                ]} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Total Bilirubin" name="Total_Bilirubin" type="number" step="0.1" value={inputData.Total_Bilirubin} onChange={handleChange} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Direct Bilirubin" name="Direct_Bilirubin" type="number" step="0.1" value={inputData.Direct_Bilirubin} onChange={handleChange} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Alk Phosphotase" name="Alkaline_Phosphotase" type="number" value={inputData.Alkaline_Phosphotase} onChange={handleChange} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Alamine Aminotransferase" name="Alamine_Aminotransferase" type="number" value={inputData.Alamine_Aminotransferase} onChange={handleChange} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Aspartate Aminotransferase" name="Aspartate_Aminotransferase" type="number" value={inputData.Aspartate_Aminotransferase} onChange={handleChange} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Total Proteins" name="Total_Protiens" type="number" step="0.1" value={inputData.Total_Protiens} onChange={handleChange} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Albumin" name="Albumin" type="number" step="0.1" value={inputData.Albumin} onChange={handleChange} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="A/G Ratio" name="Albumin_and_Globulin_Ratio" type="number" step="0.1" value={inputData.Albumin_and_Globulin_Ratio} onChange={handleChange} required />
-                                            </div>
-
-                                            <div className="form-actions-fixed full-width-col" style={{ gridColumn: '1 / -1', padding: '0.75rem', marginTop: '0.5rem' }}>
-                                                <Button type="submit" variant="primary" size="lg" isLoading={isLoading} className="w-full glow-button compact-btn" style={{ fontSize: '1rem', padding: '0.6rem' }}>
-                                                    Analyze Liver Health
-                                                </Button>
-                                            </div>
-                                        </form>
+                                    <div className="form-header-sticky">
+                                        <h3>Hepatic Assessment</h3>
+                                        <p>Enter 10 clinical blood markers</p>
                                     </div>
+                                    <form onSubmit={handleSubmit} className="form-layout-container">
+                                        <div className="scrollable-form-box">
+                                            <div className="compact-grid-form three-col">
+                                                <div className="compact-input">
+                                                    <FormField label="Age" name="Age" type="number" tooltip={getTooltip('Age')} value={inputData.Age} onChange={handleChange} required placeholder="Years" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormSelect label="Gender" name="Gender" tooltip={getTooltip('Gender')} value={inputData.Gender} onChange={handleChange} options={[
+                                                        { value: "0", label: "Male" },
+                                                        { value: "1", label: "Female" }
+                                                    ]} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Total Bilirubin" name="Total_Bilirubin" type="number" step="0.1" tooltip={getTooltip('Total_Bilirubin')} value={inputData.Total_Bilirubin} onChange={handleChange} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Direct Bilirubin" name="Direct_Bilirubin" type="number" step="0.1" tooltip={getTooltip('Direct_Bilirubin')} value={inputData.Direct_Bilirubin} onChange={handleChange} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Alk Phosphotase" name="Alkaline_Phosphotase" type="number" tooltip={getTooltip('Alkaline_Phosphotase')} value={inputData.Alkaline_Phosphotase} onChange={handleChange} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Alamine Aminotransferase" name="Alamine_Aminotransferase" type="number" tooltip={getTooltip('Alamine_Aminotransferase')} value={inputData.Alamine_Aminotransferase} onChange={handleChange} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Aspartate Aminotransferase" name="Aspartate_Aminotransferase" type="number" tooltip={getTooltip('Aspartate_Aminotransferase')} value={inputData.Aspartate_Aminotransferase} onChange={handleChange} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Total Proteins" name="Total_Protiens" type="number" step="0.1" tooltip={getTooltip('Total_Protiens')} value={inputData.Total_Protiens} onChange={handleChange} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Albumin" name="Albumin" type="number" step="0.1" tooltip={getTooltip('Albumin')} value={inputData.Albumin} onChange={handleChange} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="A/G Ratio" name="Albumin_and_Globulin_Ratio" type="number" step="0.1" tooltip={getTooltip('Albumin_and_Globulin_Ratio')} value={inputData.Albumin_and_Globulin_Ratio} onChange={handleChange} required />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="form-actions-sticky">
+                                            <Button type="submit" variant="primary" size="lg" isLoading={isLoading} className="w-full glow-button compact-btn" style={{ fontSize: '1rem', padding: '0.6rem' }}>
+                                                Analyze Liver Health
+                                            </Button>
+                                        </div>
+                                    </form>
                                 </Card>
                             ) : (
                                 <Card className="result-card fade-in-up" ref={resultRef}>
@@ -319,11 +342,27 @@ const LiverDetection: React.FC = () => {
                     border: 1px solid rgba(255,255,255,0.1) !important;
                     display: flex;
                     flex-direction: column;
-                    height: auto;
-                    max-height: 650px;
+                    height: 600px;
+                    max-height: 80vh;
                     width: 100%;
                     overflow: hidden;
                     border-radius: 12px !important;
+                }
+
+                .form-header-sticky {
+                    padding: 1.25rem 1.25rem 0.5rem;
+                    border-bottom: 1px solid rgba(255,255,255,0.05);
+                    background: rgb(30, 41, 59);
+                    z-index: 10;
+                }
+                .form-header-sticky h3 { margin: 0; font-size: 1.1rem; color: var(--text-main); }
+                .form-header-sticky p { margin: 0.25rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); }
+
+                .form-layout-container {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    overflow: hidden;
                 }
 
                 .scrollable-form-box {
@@ -341,63 +380,28 @@ const LiverDetection: React.FC = () => {
                 .compact-grid-form {
                     display: grid;
                     grid-template-columns: 1fr;
-                    gap: 0.75rem;
+                    gap: 1.25rem 0.75rem;
                     width: 100%;
                 }
 
-                .compact-grid-form.four-col { grid-template-columns: repeat(4, 1fr); }
+                .compact-grid-form.three-col { grid-template-columns: repeat(3, 1fr); }
 
-                @media (max-width: 1200px) { .compact-grid-form.four-col { grid-template-columns: repeat(3, 1fr); } }
-                @media (max-width: 992px) { .compact-grid-form.four-col { grid-template-columns: repeat(2, 1fr); } }
-                @media (max-width: 768px) { .compact-grid-form.four-col { grid-template-columns: 1fr; } }
+                @media (max-width: 1024px) { .compact-grid-form.three-col { grid-template-columns: repeat(2, 1fr); } }
+                @media (max-width: 640px) { .compact-grid-form.three-col { grid-template-columns: 1fr; } }
                 
                 .compact-input {
                     display: flex;
                     flex-direction: column;
                     width: 100%;
+                    height: 100%;
                 }
 
-                .compact-input > div {
-                    margin-bottom: 0 !important;
-                    width: 100% !important;
-                }
-
-                /* STRICT INPUT STYLING (Override Input.tsx defaults) */
-                .compact-input input, .compact-input select {
-                    padding: 0.3rem 0.5rem !important;
-                    font-size: 0.85rem !important;
-                    height: 36px !important; /* Slightly larger for visibility */
-                    line-height: normal;
-                    width: 100% !important;
-                    background: rgba(255, 255, 255, 0.05) !important; /* Increase visibility */
-                    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-                    color: var(--text-main) !important;
-                    border-radius: 6px !important;
-                }
-                
-                .compact-input input:focus, .compact-input select:focus {
-                     border-color: var(--primary) !important;
-                     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2) !important;
-                     background: rgba(255, 255, 255, 0.1) !important;
-                }
-
-                .compact-input label {
-                    font-size: 0.75rem !important;
-                    margin-bottom: 0.25rem !important;
-                    color: var(--text-secondary) !important;
-                    display: block !important;
-                    font-weight: 500 !important;
-                }
-
-                .full-width-col {grid-column: span 4; }
-                @media (max-width: 1200px) { .full-width-col {grid-column: span 3; } }
-                @media (max-width: 992px) { .full-width-col {grid-column: span 2; } }
-                @media (max-width: 768px) { .full-width-col {grid-column: span 1; } }
-
-                .form-actions-fixed {
+                .form-actions-sticky {
                     padding: 1rem 1.25rem;
-                    background: transparent;
-                    /* border-top: 1px solid rgba(255,255,255,0.05); */
+                    background: rgba(30, 41, 59, 1);
+                    border-top: 1px solid rgba(255,255,255,0.1);
+                    z-index: 10;
+                    margin-top: auto;
                 }
 
                 /* Educational Content Styles */

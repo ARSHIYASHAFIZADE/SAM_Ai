@@ -76,16 +76,18 @@ const Tooltip: React.FC<TooltipProps> = ({ text }) => {
                     display: inline-flex;
                     justify-content: center;
                     align-items: center;
-                    color: var(--primary);
+                    color: var(--text-muted);
                     transition: all var(--transition-fast);
+                    opacity: 0.7;
                 }
 
                 .tooltip-icon {
-                    font-size: 1.1rem; 
+                    font-size: 0.85rem; 
                 }
                 
                 .tooltip-container:hover .tooltip-icon-wrapper {
-                    color: var(--primary-hover);
+                    color: var(--primary);
+                    opacity: 1;
                     transform: scale(1.1);
                 }
                 
@@ -110,7 +112,7 @@ const Tooltip: React.FC<TooltipProps> = ({ text }) => {
                     line-height: var(--line-height-relaxed);
                     border-radius: var(--radius-md);
                     box-shadow: var(--shadow-lg);
-                    z-index: 1000;
+                    z-index: 9999;
                     pointer-events: none;
                     white-space: normal;
                     border: 1px solid rgba(0, 0, 0, 0.08);

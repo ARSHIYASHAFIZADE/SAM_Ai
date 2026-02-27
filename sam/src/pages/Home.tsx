@@ -8,9 +8,12 @@ import Button from '../components/common/Button';
 import '../styles/global.css';
 import heroImage from '../assets/images/hero.png';
 
-const Home: React.FC = () => {
-    // Determine auth state (this logic might need to be lifted or context used)
-    const isAuthenticated = !!sessionStorage.getItem('user_id');
+interface HomeProps {
+    isAuthenticated: boolean;
+    onLogout: () => void;
+}
+
+const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
     const navigate = useNavigate();
 
     const handleCardClick = (path: string) => {
@@ -19,7 +22,8 @@ const Home: React.FC = () => {
 
     return (
         <div className="page-wrapper">
-            <Navbar isAuthenticated={isAuthenticated} onLogout={() => sessionStorage.removeItem('user_id')} />
+            <Navbar isAuthenticated={isAuthenticated} onLogout={onLogout} />
+
 
             <main style={{ flex: 1 }}>
                 {/* Hero Section */}

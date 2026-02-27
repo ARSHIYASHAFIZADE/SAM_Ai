@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+:root {
+  --teal: #0d2836;
+  --teal-dark: #07151c;
+  --teal-glow: rgba(13, 40, 54, 0.18);
+  --teal-bg: rgba(13, 40, 54, 0.04);
+}
+
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { min-height: 100vh; background: #fafafa; color: #18181b; }
+
+::selection { background: #e0f5f5; color: #0F9D9A; }
+
+.glass {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+}
+
+.teal-gradient {
+  background: linear-gradient(135deg, #0d2836 0%, #154157 100%);
+}
+
+.text-teal-grad {
+  background: linear-gradient(135deg, #0d2836 0%, #206282 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+input, textarea, select {
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #0F9D9A !important;
+  box-shadow: 0 0 0 3px rgba(15, 157, 154, 0.15) !important;
+  background: #ffffff !important;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

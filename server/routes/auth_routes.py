@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, session
-from extensions import db, bcrypt
+from extensions import db, bcrypt, limiter
 from models import User
 
 auth_bp = Blueprint('auth', __name__)
@@ -16,6 +16,7 @@ def get_current_user():
     })
 
 @auth_bp.route("/register", methods=["POST"])
+@limiter.limit("10 per hour")  # Fix 4: brute-force / abuse protection
 def register_user():
     email = request.json['email']
     password = request.json['password']
@@ -32,14 +33,15 @@ def register_user():
     })
 
 @auth_bp.route('/login', methods=['POST'])
+@limiter.limit("5 per minute")  # Fix 4: credential stuffing protection
 def login_user():
     email = request.json['email']
     password = request.json['password']
-    user = User.query.filter_by(email=email).first() 
+    user = User.query.filter_by(email=email).first()
     if user is None:
         return jsonify({"error":"unauthorized"}), 401
     if not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"error":"unauthorized"}), 401  
+        return jsonify({"error":"unauthorized"}), 401
     session["user_id"] = user.id
     return jsonify({
         "id":user.id,

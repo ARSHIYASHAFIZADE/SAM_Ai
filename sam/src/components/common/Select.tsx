@@ -27,16 +27,17 @@ const Select: React.FC<SelectProps> = ({
     const containerStyle: React.CSSProperties = {
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.25rem',
-        width: '100%',
-        marginBottom: 'var(--spacing-md)',
+        justifyContent: 'flex-end',
+        height: '100%',
+        fontFamily: 'var(--font-main)',
     };
 
     const labelContainerStyle: React.CSSProperties = {
         display: 'flex',
         alignItems: 'center',
         gap: '0.375rem',
-        marginBottom: 'var(--spacing-sm)',
+        marginBottom: '0.75rem',
+        marginTop: 'auto',
     };
 
     const labelStyle: React.CSSProperties = {
@@ -54,7 +55,9 @@ const Select: React.FC<SelectProps> = ({
 
     const selectStyle: React.CSSProperties = {
         width: '100%',
-        padding: 'var(--spacing-sm) var(--spacing-md)',
+        height: '48px',
+        boxSizing: 'border-box',
+        padding: '0 var(--spacing-md)',
         paddingRight: '2.5rem',
         background: 'var(--surface-light)',
         border: error ? '1.5px solid var(--danger)' : '1px solid rgba(255, 255, 255, 0.1)',

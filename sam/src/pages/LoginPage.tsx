@@ -8,8 +8,9 @@ import { API_BASE_URL } from '../utils/api';
 import '../styles/global.css';
 
 interface LoginPageProps {
-    onLogin?: (token: string) => void;
+    onLogin?: () => void;
 }
+
 
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     const [email, setEmail] = useState('');
@@ -38,10 +39,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             const data = await response.json();
 
             if (response.ok) {
-                if (onLogin) onLogin(data.id);
-                // Fallback if onLogin not provided (for direct testing)
-                sessionStorage.setItem('user_id', data.id);
+                if (onLogin) onLogin();
                 navigate(from, { replace: true });
+
             } else {
                 setError(data.error || 'Login failed. Please check your credentials.');
             }

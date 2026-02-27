@@ -7,9 +7,15 @@ from sklearn.model_selection import train_test_split as tts
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import LocalOutlierFactor
+import joblib
+from pathlib import Path
 import logging
 
 logger = logging.getLogger(__name__)
+
+_MODELS_DIR = Path("saved_models")
+_FEMALE_BUNDLE = _MODELS_DIR / "diabetes_female_bundle.pkl"
+_MALE_BUNDLE   = _MODELS_DIR / "diabetes_male_bundle.pkl"
 
 # Female Model Globals
 transformer_female = None
@@ -26,10 +32,16 @@ X_male_columns = None
 
 def preprocess_female_diabetes():
     global transformer_female, scaler_female, gbc_female, model_female, feature_names_female
-    
-    # Read the CSV file
+    _MODELS_DIR.mkdir(exist_ok=True)
+    if _FEMALE_BUNDLE.exists():
+        b = joblib.load(_FEMALE_BUNDLE)
+        transformer_female, scaler_female, gbc_female, feature_names_female = (
+            b["transformer"], b["scaler"], b["model"], b["feature_names"]
+        )
+        logger.info("Female diabetes model loaded from disk.")
+        return
     try:
-        Diabetes_DS = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM_Ai/refs/heads/main/server/dfw.csv')
+        Diabetes_DS = pd.read_csv('dfw.csv')  # local file in server/
     except Exception as e:
         logger.error(f"Failed to load Female Diabetes Dataset: {e}")
         return
@@ -94,6 +106,8 @@ def preprocess_female_diabetes():
     # Train a Gradient Boosting Classifier
     gbc_female = GradientBoostingClassifier(learning_rate=0.1, loss='exponential', n_estimators=150)
     gbc_female.fit(X_train_scaled, y_train)
+    joblib.dump({"transformer": transformer_female, "scaler": scaler_female, "model": gbc_female, "feature_names": feature_names_female}, _FEMALE_BUNDLE)
+    logger.info("Female diabetes model trained and saved.")
 
     # Train a Logistic Regression model in a pipeline
     model_lr = LogisticRegression(max_iter=1000)
@@ -143,8 +157,16 @@ def predict_female_diabetes(input_data):
 
 def preprocess_male_diabetes():
     global Diabetes_DS_male, poly_male, scaler_male, lr_male, X_male_columns
+    _MODELS_DIR.mkdir(exist_ok=True)
+    if _MALE_BUNDLE.exists():
+        b = joblib.load(_MALE_BUNDLE)
+        poly_male, scaler_male, lr_male, X_male_columns = (
+            b["poly"], b["scaler"], b["model"], b["columns"]
+        )
+        logger.info("Male diabetes model loaded from disk.")
+        return
     try:
-        Diabetes_DS_male = pd.read_csv('https://raw.githubusercontent.com/ARSHIYASHAFIZADE/SAM_Ai/refs/heads/main/server/dfm.csv')
+        Diabetes_DS_male = pd.read_csv('dfm.csv')  # local file in server/
     except Exception as e:
         logger.error(f"Failed to load Male Diabetes Dataset: {e}")
         return
@@ -161,6 +183,8 @@ def preprocess_male_diabetes():
     X_train_male, X_val_male, y_train_male, y_val_male = tts(X_poly_scaled, y_male, test_size=0.2, random_state=0)
     lr_male = LogisticRegression()
     lr_male.fit(X_train_male, y_train_male)
+    joblib.dump({"poly": poly_male, "scaler": scaler_male, "model": lr_male, "columns": X_male_columns}, _MALE_BUNDLE)
+    logger.info("Male diabetes model trained and saved.")
 
 def predict_male_diabetes(input_data):
     if lr_male is None:

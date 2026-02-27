@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDroplet, faUtensils, faWeight, faInfoCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
-import Input from '../components/common/Input';
-import Select from '../components/common/Select';
+import FormField from '../components/common/FormField';
+import FormSelect from '../components/common/FormSelect';
 import Button from '../components/common/Button';
 import Toast from '../components/common/Toast';
 import { API_BASE_URL } from '../utils/api';
@@ -21,7 +21,8 @@ const INITIAL_STATE = {
     BMI: '', HbA1c_level: '', Blood_glucose_level: ''
 };
 
-const ManDiabetes: React.FC = () => {
+const ManDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
+
     const [inputData, setInputData] = useState(INITIAL_STATE);
     const [result, setResult] = useState<PredictionResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +53,19 @@ const ManDiabetes: React.FC = () => {
             resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, [result]);
+
+    const getTooltip = (field: string) => {
+        const tooltips: Record<string, string> = {
+            Age: "Patient's chronological age in years.",
+            Hypertension: "Whether the patient has a history of hypertension (high blood pressure).",
+            Heart_disease: "Whether the patient has a history of cardiovascular disease.",
+            Smoking_history: "Patient's history of smoking tobacco.",
+            BMI: "Body mass index (weight in kg / height in m²).",
+            HbA1c_level: "Hemoglobin A1c level (%), reflecting average blood sugar over the past 2-3 months.",
+            Blood_glucose_level: "Current blood glucose level (mg/dL)."
+        };
+        return tooltips[field] || "";
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setInputData({ ...inputData, [e.target.name]: e.target.value });
@@ -104,7 +118,8 @@ const ManDiabetes: React.FC = () => {
     };
 
     return (
-        <MainLayout isAuthenticated={true} onLogout={() => sessionStorage.removeItem('user_id')}>
+        <MainLayout isAuthenticated={true} onLogout={onLogout}>
+
             <div className="page-container">
                 {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
@@ -133,54 +148,58 @@ const ManDiabetes: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* RIGHT: Form / Result */}
                         <div className="hero-form fade-in-left">
                             {!result ? (
                                 <Card className="fixed-height-card">
-                                    <div className="scrollable-form-box">
-                                        <form onSubmit={handleSubmit} className="compact-grid-form four-col">
-                                            <div className="compact-input">
-                                                <Input label="Age" name="Age" type="number" value={inputData.Age} onChange={handleChange} required placeholder="Years" />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Select label="Hypertension" name="Hypertension" value={inputData.Hypertension} onChange={handleChange} options={[
-                                                    { value: "0", label: "No" },
-                                                    { value: "1", label: "Yes" }
-                                                ]} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Select label="Heart Disease" name="Heart_disease" value={inputData.Heart_disease} onChange={handleChange} options={[
-                                                    { value: "0", label: "No" },
-                                                    { value: "1", label: "Yes" }
-                                                ]} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Select label="Smoking History" name="Smoking_history" value={inputData.Smoking_history} onChange={handleChange} options={[
-                                                    { value: "never", label: "Never" },
-                                                    { value: "current", label: "Current" },
-                                                    { value: "former", label: "Former" },
-                                                    { value: "ever", label: "Ever" },
-                                                    { value: "not current", label: "Not Current" },
-                                                    { value: "No Info", label: "No Info" }
-                                                ]} required />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="BMI" name="BMI" type="number" step="0.1" value={inputData.BMI} onChange={handleChange} required placeholder="Value" />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="HbA1c Level" name="HbA1c_level" type="number" step="0.1" value={inputData.HbA1c_level} onChange={handleChange} required placeholder="%" />
-                                            </div>
-                                            <div className="compact-input">
-                                                <Input label="Blood Glucose" name="Blood_glucose_level" type="number" value={inputData.Blood_glucose_level} onChange={handleChange} required placeholder="mg/dL" />
-                                            </div>
-
-                                            <div className="form-actions-fixed full-width-col" style={{ gridColumn: '1 / -1', padding: '0.75rem', marginTop: '0.5rem' }}>
-                                                <Button type="submit" variant="primary" size="lg" isLoading={isLoading} className="w-full glow-button compact-btn" style={{ fontSize: '1rem', padding: '0.6rem' }}>
-                                                    Assess Risk
-                                                </Button>
-                                            </div>
-                                        </form>
+                                    <div className="form-header-sticky">
+                                        <h3>Health Assessment</h3>
+                                        <p>Enter 7 metabolic and history markers</p>
                                     </div>
+                                    <form onSubmit={handleSubmit} className="form-layout-container">
+                                        <div className="scrollable-form-box">
+                                            <div className="compact-grid-form three-col">
+                                                <div className="compact-input">
+                                                    <FormField label="Age" name="Age" type="number" tooltip={getTooltip('Age')} value={inputData.Age} onChange={handleChange} required placeholder="Years" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormSelect label="Hypertension" name="Hypertension" tooltip={getTooltip('Hypertension')} value={inputData.Hypertension} onChange={handleChange} options={[
+                                                        { value: "0", label: "No" },
+                                                        { value: "1", label: "Yes" }
+                                                    ]} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormSelect label="Heart Disease" name="Heart_disease" tooltip={getTooltip('Heart_disease')} value={inputData.Heart_disease} onChange={handleChange} options={[
+                                                        { value: "0", label: "No" },
+                                                        { value: "1", label: "Yes" }
+                                                    ]} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormSelect label="Smoking History" name="Smoking_history" tooltip={getTooltip('Smoking_history')} value={inputData.Smoking_history} onChange={handleChange} options={[
+                                                        { value: "never", label: "Never" },
+                                                        { value: "current", label: "Current" },
+                                                        { value: "former", label: "Former" },
+                                                        { value: "ever", label: "Ever" },
+                                                        { value: "not current", label: "Not Current" },
+                                                        { value: "No Info", label: "No Info" }
+                                                    ]} required />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="BMI" name="BMI" type="number" step="0.1" tooltip={getTooltip('BMI')} value={inputData.BMI} onChange={handleChange} required placeholder="Value" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="HbA1c Level" name="HbA1c_level" type="number" step="0.1" tooltip={getTooltip('HbA1c_level')} value={inputData.HbA1c_level} onChange={handleChange} required placeholder="%" />
+                                                </div>
+                                                <div className="compact-input">
+                                                    <FormField label="Blood Glucose" name="Blood_glucose_level" type="number" tooltip={getTooltip('Blood_glucose_level')} value={inputData.Blood_glucose_level} onChange={handleChange} required placeholder="mg/dL" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-actions-sticky">
+                                            <Button type="submit" variant="primary" size="lg" isLoading={isLoading} className="w-full glow-button compact-btn" style={{ fontSize: '1rem', padding: '0.6rem' }}>
+                                                Assess Risk
+                                            </Button>
+                                        </div>
+                                    </form>
                                 </Card>
                             ) : (
                                 <Card className="result-card fade-in-up" ref={resultRef}>
@@ -312,18 +331,28 @@ const ManDiabetes: React.FC = () => {
                     border: 1px solid rgba(255,255,255,0.1) !important;
                     display: flex;
                     flex-direction: column;
-                    height: auto;
-                    max-height: 650px;
+                    height: 600px;
+                    max-height: 80vh;
                     width: 100%;
                     overflow: hidden;
                     border-radius: 12px !important;
                 }
 
-                .card-header-area {
-                    padding: 1rem 1.5rem 0.5rem;
+                .form-header-sticky {
+                    padding: 1.25rem 1.25rem 0.5rem;
                     border-bottom: 1px solid rgba(255,255,255,0.05);
+                    background: rgb(30, 41, 59);
+                    z-index: 10;
                 }
-                .form-header {margin: 0; font-size: 1.1rem; color: var(--text-main); }
+                .form-header-sticky h3 { margin: 0; font-size: 1.1rem; color: var(--text-main); }
+                .form-header-sticky p { margin: 0.25rem 0 0 0; font-size: 0.8rem; color: var(--text-secondary); }
+
+                .form-layout-container {
+                    display: flex;
+                    flex-direction: column;
+                    flex: 1;
+                    overflow: hidden;
+                }
 
                 .scrollable-form-box {
                     padding: 1.25rem;
@@ -339,57 +368,39 @@ const ManDiabetes: React.FC = () => {
                 .compact-grid-form {
                     display: grid;
                     grid-template-columns: 1fr;
-                    gap: 0.75rem; /* Tighter gap */
+                    gap: 1.25rem 0.75rem; 
                     width: 100%;
                 }
 
-                .compact-grid-form.four-col {
-                    grid-template-columns: repeat(4, 1fr);
-                }
+                .compact-grid-form.three-col { grid-template-columns: repeat(3, 1fr); }
 
-                @media (max-width: 1200px) {
-                    .compact-grid-form.four-col {grid-template-columns: repeat(3, 1fr); }
-                }
-                @media (max-width: 992px) {
-                    .compact-grid-form.four-col {grid-template-columns: repeat(2, 1fr); }
-                }
-                @media (max-width: 768px) {
-                    .compact-grid-form.four-col {grid-template-columns: 1fr; }
-                }
+                @media (max-width: 1024px) { .compact-grid-form.three-col { grid-template-columns: repeat(2, 1fr); } }
+                @media (max-width: 640px) { .compact-grid-form.three-col { grid-template-columns: 1fr; } }
 
-                .full-width-col {grid-column: span 4; }
-                @media (max-width: 1200px) { .full-width-col {grid-column: span 3; } }
-                @media (max-width: 992px) { .full-width-col {grid-column: span 2; } }
-                @media (max-width: 768px) { .full-width-col {grid-column: span 1; } }
-
-                .form-actions-fixed {
+                .form-actions-sticky {
                     padding: 1rem 1.25rem;
-                .form-actions-fixed {
-                    padding: 1rem 1.25rem;
-                    background: transparent;
-                    /* border: none; */
-                }
+                    background: rgba(30, 41, 59, 1);
+                    border-top: 1px solid rgba(255,255,255,0.1);
+                    z-index: 10;
+                    margin-top: auto;
                 }
 
                 .compact-input {
                     display: flex;
                     flex-direction: column;
                     width: 100%;
+                    height: 100%;
                 }
 
-                .compact-input > div {
-                    margin-bottom: 0 !important;
-                    width: 100% !important;
-                }
+                .compact-input > div { margin-bottom: 0 !important; width: 100% !important; }
 
-                /* ULTRA COMPACT INPUT OVERRIDES */
                 .compact-input input, .compact-input select {
-                    padding: 0.3rem 0.5rem !important; /* Tiny padding */
-                    font-size: 0.85rem !important;      /* Tiny font */
-                    height: 36px !important;            /* Fixed tiny height */
+                    padding: 0.3rem 0.5rem !important;
+                    font-size: 0.85rem !important;
+                    height: 36px !important;
                     line-height: normal;
                     width: 100% !important;
-                    background: rgba(255, 255, 255, 0.05) !important; /* Increase visibility */
+                    background: rgba(255, 255, 255, 0.05) !important;
                     border: 1px solid rgba(255, 255, 255, 0.15) !important;
                     color: var(--text-main) !important;
                     border-radius: 6px !important;
@@ -402,7 +413,7 @@ const ManDiabetes: React.FC = () => {
                 }
 
                 .compact-input label {
-                    font-size: 0.75rem !important;      /* Tiny label */
+                    font-size: 0.75rem !important;
                     margin-bottom: 0.25rem !important;
                     color: var(--text-secondary) !important;
                     display: block !important;
