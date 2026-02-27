@@ -36,7 +36,6 @@ seaborn==0.13.2
 SQLAlchemy==2.0.32
 tenacity==9.0.0
 tqdm==4.66.5
-typing_extensions==4.12.2
 urllib3==2.2.2
 Werkzeug==3.0.3
 WTForms==3.1.2
