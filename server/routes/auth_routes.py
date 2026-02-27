@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, session
-from extensions import db, bcrypt, limiter
-from models import User
+from extensions import bcrypt, limiter
+from models import User, db
 
 auth_bp = Blueprint('auth', __name__)
 
