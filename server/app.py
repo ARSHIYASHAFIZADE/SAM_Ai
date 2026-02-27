@@ -10,6 +10,7 @@ from utils import configure_logging
 from ml_models import set_model_ready, all_models_ready, MODEL_VERSION
 import os
 import logging
+import re
 
 # Fix 5: Structured JSON logging configured before anything else
 configure_logging()
@@ -51,7 +52,9 @@ allowed_origins = [
     "http://127.0.0.1:3000",
     "http://localhost:5173",
     "http://localhost:10000",
-    "http://127.0.0.1:10000"
+    "http://127.0.0.1:10000",
+    # Allow dynamic Vercel preview environments
+    re.compile(r"^https://sam-.*\.vercel\.app$")
 ]
 
 CORS(app,
