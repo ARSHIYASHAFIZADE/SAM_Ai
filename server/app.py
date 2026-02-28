@@ -63,20 +63,6 @@ CORS(app,
      allow_headers=["Content-Type", "Authorization"],
      supports_credentials=True)
 
-@app.before_request
-def handle_preflight():
-    if request.method == "OPTIONS":
-        response = app.make_response("")
-        origin = request.headers.get('Origin')
-        if origin in allowed_origins:
-            response.headers.add("Access-Control-Allow-Origin", origin)
-        else:
-            response.headers.add("Access-Control-Allow-Origin", allowed_origins[0])
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-        response.headers.add("Access-Control-Allow-Credentials", "true")
-        return response, 204
-
 with app.app_context():
     db.create_all()
 
@@ -112,8 +98,12 @@ def hello_world():
 
 @app.route('/test_redis')
 def test_redis():
-    session['test'] = 'Redis working!'
-    return jsonify({"message": session.get('test', 'Failed to set session')})
+    try:
+        session['test'] = 'Redis working!'
+        return jsonify({"message": session.get('test', 'Failed to set session')})
+    except Exception as e:
+        import traceback
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
 
 
 @app.route('/healthz')
