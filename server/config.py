@@ -21,14 +21,13 @@ class ApplicationConfig:
     WTF_CSRF_ENABLED = True
     WTF_CSRF_TIME_LIMIT = 3600  # 1 hour
 
-    # Fix 6: Redis sessions — fall back to filesystem only if REDIS_URL is absent (local dev)
-    _redis_url = os.environ.get("REDIS_URL")
-    if _redis_url:
-        SESSION_TYPE = "redis"
-        SESSION_REDIS = redis.from_url(_redis_url)
-    else:
-        SESSION_TYPE = "filesystem"
-
+    # Fix: Default over to 'filesystem' as the Redis instance running on Railway appears broken
+    SESSION_TYPE = "filesystem"
+    # _redis_url = os.environ.get("REDIS_URL")
+    # if _redis_url:
+    #     SESSION_TYPE = "redis"
+    #     SESSION_REDIS = redis.from_url(_redis_url)
+    
     SESSION_PERMANENT = False
     SESSION_USE_SIGNER = True
     SESSION_COOKIE_SAMESITE = "None"
