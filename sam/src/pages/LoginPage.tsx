@@ -33,6 +33,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({ email, password }),
             });
 
@@ -40,8 +41,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
             if (response.ok) {
                 if (onLogin) onLogin();
-                navigate(from, { replace: true });
-
+                navigate(from !== '/login' ? from : '/', { replace: true });
             } else {
                 setError(data.error || 'Login failed. Please check your credentials.');
             }

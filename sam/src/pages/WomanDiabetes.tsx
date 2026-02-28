@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPersonPregnant, faBaby, faFileMedical, faInfoCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
+import { faDroplet, faSyringe, faFileMedical, faCircleInfo, faUserDoctor, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
 import FormField from '../components/common/FormField';
@@ -133,19 +133,19 @@ const WomanDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                 <div className="pulse-circle-container">
                                     <div className="pulse-circle"></div>
                                     <div className="icon-wrapper">
-                                        <FontAwesomeIcon icon={faPersonPregnant} className="main-icon" />
+                                        <FontAwesomeIcon icon={faDroplet} className="main-icon" />
                                     </div>
                                 </div>
                                 <h1 className="page-title">Diabetes <br /><span className="text-gradient">Risk (Women)</span></h1>
                                 <p className="page-subtitle">Specialized assessment for gestational and type 2 diabetes risks</p>
                                 <div className="stats-row">
                                     <div className="stat-item">
-                                        <FontAwesomeIcon icon={faBaby} className="stat-icon" />
-                                        <span>Pregnancy Impact</span>
+                                        <FontAwesomeIcon icon={faSyringe} className="stat-icon" />
+                                        <span>Insulin Testing</span>
                                     </div>
                                     <div className="stat-item">
                                         <FontAwesomeIcon icon={faFileMedical} className="stat-icon" />
-                                        <span>History Analysis</span>
+                                        <span>Clinical History</span>
                                     </div>
                                 </div>
                             </div>
@@ -224,11 +224,11 @@ const WomanDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
 
                         <div className="info-grid animate-on-scroll delay-2">
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> About Diabetes</h3>
+                                <h3><FontAwesomeIcon icon={faDroplet} /> About Diabetes</h3>
                                 <p>Diabetes is a chronic (long-lasting) health condition that affects how your body turns food into energy. For women, gestational diabetes can also occur during pregnancy.</p>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faUserMd} /> Risk Factors</h3>
+                                <h3><FontAwesomeIcon icon={faUserDoctor} /> Risk Factors</h3>
                                 <ul>
                                     <li><strong>Pregnancy History:</strong> Having gestational diabetes before.</li>
                                     <li><strong>Weight:</strong> Being overweight increases risk.</li>
@@ -237,7 +237,7 @@ const WomanDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Prevention</h3>
+                                <h3><FontAwesomeIcon icon={faShieldHalved} /> Prevention</h3>
                                 <p>Healthy eating, regular physical activity, and maintaining a healthy weight can help prevent type 2 diabetes and manage gestational diabetes risks.</p>
                             </div>
                         </div>

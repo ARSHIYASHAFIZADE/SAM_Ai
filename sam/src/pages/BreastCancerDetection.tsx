@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRibbon, faMicroscope, faDna, faChartPie, faChartBar, faInfoCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
+import { faRibbon, faMicroscope, faDna, faChartPie, faChartBar, faUserDoctor, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
 import FormField from '../components/common/FormField';
@@ -290,7 +290,7 @@ const BreastCancerDetection: React.FC<{ onLogout?: () => void }> = ({ onLogout }
                                 <p>Breast cancer occurs when cells in the breast divide and grow without control. Screening and early detection are crucial for effective treatment.</p>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faUserMd} /> Risk Factors</h3>
+                                <h3><FontAwesomeIcon icon={faUserDoctor} /> Risk Factors</h3>
                                 <ul>
                                     <li><strong>Age:</strong> Risk increases as you get older.</li>
                                     <li><strong>Genetics:</strong> Family history or gene mutations (BRCA1/2).</li>
@@ -299,7 +299,7 @@ const BreastCancerDetection: React.FC<{ onLogout?: () => void }> = ({ onLogout }
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Prevention</h3>
+                                <h3><FontAwesomeIcon icon={faShieldHalved} /> Prevention</h3>
                                 <p>Limit alcohol, maintain a healthy weight, be physically active, and follow recommended screening guidelines for your age and risk level.</p>
                             </div>
                         </div>

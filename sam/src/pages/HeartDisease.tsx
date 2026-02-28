@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeartPulse, faStethoscope, faChartLine, faUserMd, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faHeartPulse, faStethoscope, faChartLine, faUserDoctor, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
 import FormField from '../components/common/FormField';
@@ -230,7 +230,12 @@ const HeartDisease: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                                     ]} required />
                                                 </div>
                                                 <div className="compact-input">
-                                                    <FormField label="Major Vessels" name="ca" type="number" min="0" max="3" tooltip={getTooltip('ca')} value={inputData.ca} onChange={handleChange} required />
+                                                    <FormSelect label="Major Vessels" name="ca" tooltip={getTooltip('ca')} value={inputData.ca} onChange={handleChange} options={[
+                                                        { value: "0", label: "0 vessels" },
+                                                        { value: "1", label: "1 vessel" },
+                                                        { value: "2", label: "2 vessels" },
+                                                        { value: "3", label: "3 vessels" }
+                                                    ]} required />
                                                 </div>
 
                                                 {/* Row 4 */}
@@ -288,7 +293,7 @@ const HeartDisease: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                 <p>Heart disease describes a range of conditions that affect your heart. Diseases under the heart disease umbrella include blood vessel diseases, such as coronary artery disease; heart rhythm problems (arrhythmias); and heart defects you're born with (congenital heart defects).</p>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faUserMd} /> Risk Factors</h3>
+                                <h3><FontAwesomeIcon icon={faUserDoctor} /> Risk Factors</h3>
                                 <ul>
                                     <li><strong>Age:</strong> Risk increases as you get older.</li>
                                     <li><strong>Sex:</strong> Men are generally at greater risk.</li>
@@ -297,7 +302,7 @@ const HeartDisease: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Prevention</h3>
+                                <h3><FontAwesomeIcon icon={faShieldHalved} /> Prevention</h3>
                                 <p>You can prevent or treat some forms of heart disease with healthy lifestyle choices. This includes a heart-healthy diet, regular exercise, maintaining a healthy weight, and not smoking.</p>
                             </div>
                         </div>

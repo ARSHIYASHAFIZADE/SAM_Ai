@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeartPulse, faLungs, faDroplet, faDna, faMars, faVenus } from '@fortawesome/free-solid-svg-icons';
+import { faHeartPulse, faVials, faDroplet, faRibbon, faMicroscope } from '@fortawesome/free-solid-svg-icons';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import Button from '../components/common/Button';
@@ -72,7 +72,7 @@ const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
                             <div className="feature-card liver-card" onClick={() => handleCardClick('/liverDetection')}>
                                 <div className="card-bg-glow"></div>
                                 <div className="feature-icon-wrapper">
-                                    <FontAwesomeIcon icon={faLungs} className="feature-icon" />
+                                    <FontAwesomeIcon icon={faVials} className="feature-icon" />
                                 </div>
                                 <h3>Liver Health</h3>
                                 <p>Comprehensive analysis of liver function markers for early detection of hepatic disorders.</p>
@@ -83,7 +83,6 @@ const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
                             <div className="feature-card diabetes-f-card" onClick={() => handleCardClick('/womanDiabetes')}>
                                 <div className="card-bg-glow"></div>
                                 <div className="feature-icon-wrapper">
-                                    <FontAwesomeIcon icon={faVenus} className="feature-icon" style={{ marginRight: '8px' }} />
                                     <FontAwesomeIcon icon={faDroplet} className="feature-icon" />
                                 </div>
                                 <h3>Diabetes (Female)</h3>
@@ -95,7 +94,6 @@ const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
                             <div className="feature-card diabetes-m-card" onClick={() => handleCardClick('/manDiabetes')}>
                                 <div className="card-bg-glow"></div>
                                 <div className="feature-icon-wrapper">
-                                    <FontAwesomeIcon icon={faMars} className="feature-icon" style={{ marginRight: '8px' }} />
                                     <FontAwesomeIcon icon={faDroplet} className="feature-icon" />
                                 </div>
                                 <h3>Diabetes (Male)</h3>
@@ -107,7 +105,7 @@ const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
                             <div className="feature-card cancer-card" onClick={() => handleCardClick('/breastCancerDetection')}>
                                 <div className="card-bg-glow"></div>
                                 <div className="feature-icon-wrapper">
-                                    <FontAwesomeIcon icon={faDna} className="feature-icon" />
+                                    <FontAwesomeIcon icon={faRibbon} className="feature-icon" />
                                 </div>
                                 <h3>Breast Cancer</h3>
                                 <p>Advanced screening analysis using machine learning on cytology data.</p>

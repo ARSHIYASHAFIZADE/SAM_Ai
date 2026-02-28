@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFlask, faVial, faNotesMedical, faInfoCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
+import { faVials, faVial, faNotesMedical, faCircleInfo, faUserDoctor, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
 import FormField from '../components/common/FormField';
@@ -141,7 +141,7 @@ const LiverDetection: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                 <div className="pulse-circle-container">
                                     <div className="pulse-circle"></div>
                                     <div className="icon-wrapper">
-                                        <FontAwesomeIcon icon={faFlask} className="main-icon" />
+                                        <FontAwesomeIcon icon={faVials} className="main-icon" />
                                     </div>
                                 </div>
                                 <h1 className="page-title">Liver <br /><span className="text-gradient">Function</span></h1>
@@ -246,11 +246,11 @@ const LiverDetection: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
 
                         <div className="info-grid animate-on-scroll delay-2">
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> About Liver Function</h3>
+                                <h3><FontAwesomeIcon icon={faVials} /> About Liver Function</h3>
                                 <p>The liver is essential for digesting food and ridding your body of toxic substances. Liver disease can be inherited or caused by a variety of factors, such as virus use (hepatitis) and alcohol use.</p>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faUserMd} /> Risk Factors</h3>
+                                <h3><FontAwesomeIcon icon={faUserDoctor} /> Risk Factors</h3>
                                 <ul>
                                     <li><strong>Alcohol Use:</strong> Heavy alcohol consumption.</li>
                                     <li><strong>Obesity:</strong> Being overweight increases risk.</li>
@@ -259,7 +259,7 @@ const LiverDetection: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Prevention</h3>
+                                <h3><FontAwesomeIcon icon={faShieldHalved} /> Prevention</h3>
                                 <p>Drink alcohol in moderation, maintain a healthy weight, and get vaccinated against hepatitis to protect your liver health.</p>
                             </div>
                         </div>

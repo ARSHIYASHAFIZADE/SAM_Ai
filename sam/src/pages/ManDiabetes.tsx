@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDroplet, faUtensils, faWeight, faInfoCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
+import { faDroplet, faUtensils, faWeightScale, faUserDoctor, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '../components/layout/MainLayout';
 import Card from '../components/common/Card';
 import FormField from '../components/common/FormField';
@@ -97,8 +97,8 @@ const ManDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
         const numericData = {
             Gender: 'Male',
             Age: Number(inputData.Age),
-            Hypertension: inputData.Hypertension === 'Yes' ? 1 : 0,
-            Heart_disease: inputData.Heart_disease === 'Yes' ? 1 : 0,
+            Hypertension: Number(inputData.Hypertension),
+            Heart_disease: Number(inputData.Heart_disease),
             Smoking_history: inputData.Smoking_history,
             BMI: Number(inputData.BMI),
             HbA1c_level: Number(inputData.HbA1c_level),
@@ -141,7 +141,7 @@ const ManDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                         <span>Diet Analysis</span>
                                     </div>
                                     <div className="stat-item">
-                                        <FontAwesomeIcon icon={faWeight} className="stat-icon" />
+                                        <FontAwesomeIcon icon={faWeightScale} className="stat-icon" />
                                         <span>BMI Impact</span>
                                     </div>
                                 </div>
@@ -235,11 +235,11 @@ const ManDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
 
                         <div className="info-grid animate-on-scroll delay-2">
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> About Diabetes</h3>
+                                <h3><FontAwesomeIcon icon={faDroplet} /> About Diabetes</h3>
                                 <p>Diabetes is a chronic (long-lasting) health condition that affects how your body turns food into energy. Most of the food you eat is broken down into sugar (glucose) and released into your bloodstream.</p>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faUserMd} /> Risk Factors</h3>
+                                <h3><FontAwesomeIcon icon={faUserDoctor} /> Risk Factors</h3>
                                 <ul>
                                     <li><strong>Weight:</strong> Being overweight increases risk.</li>
                                     <li><strong>Age:</strong> Risk increases as you get older.</li>
@@ -248,7 +248,7 @@ const ManDiabetes: React.FC<{ onLogout?: () => void }> = ({ onLogout }) => {
                                 </ul>
                             </div>
                             <div className="info-card">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Prevention</h3>
+                                <h3><FontAwesomeIcon icon={faShieldHalved} /> Prevention</h3>
                                 <p>Type 2 diabetes can be prevented or delayed with healthy lifestyle changes. Losing a small amount of weight and getting regular physical activity can prevent or delay type 2 diabetes.</p>
                             </div>
                         </div>
