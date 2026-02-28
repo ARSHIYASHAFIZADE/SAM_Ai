@@ -22,7 +22,7 @@ export default function AboutPage() {
         <Link href="/" style={{ fontSize: 14, color: '#71717a', textDecoration: 'none' }}>← Back to home</Link>
       </header>
 
-      <main style={{ maxWidth: 900, margin: '0 auto', padding: '72px 24px 100px' }}>
+      <main style={{ maxWidth: 900, margin: '0 auto', padding: '72px 24px 160px' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <div style={{ display: 'inline-block', padding: '5px 14px', borderRadius: 100, background: 'rgba(15,157,154,0.07)', border: '1px solid rgba(15,157,154,0.2)', fontSize: 12, fontWeight: 700, color: '#0F9D9A', marginBottom: 20, letterSpacing: 0.5 }}>About SAM AI</div>
           <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#09090b', letterSpacing: '-1px', marginBottom: 20, lineHeight: 1.15 }}>
