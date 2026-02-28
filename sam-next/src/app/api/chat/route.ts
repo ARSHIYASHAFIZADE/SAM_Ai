@@ -46,7 +46,10 @@ export async function POST(req: NextRequest) {
       if (res.status === 503 || errText.includes('loading')) {
         return NextResponse.json({ reply: 'The AI model is currently loading into memory. Please try again in about 20 seconds!' })
       }
-      return NextResponse.json({ error: 'AI service unavailable' }, { status: 502 })
+      return NextResponse.json({ 
+        error: 'AI service unavailable', 
+        debug: { status: res.status, text: errText, hasToken: !!token } 
+      }, { status: 502 })
     }
 
     const data = await res.json()
