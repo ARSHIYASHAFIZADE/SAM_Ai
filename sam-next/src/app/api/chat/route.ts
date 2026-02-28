@@ -1,16 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Use the exact OpenAI-compatible endpoint that works for free-tier LLaMA
-const HF_URL = 'https://api-inference.huggingface.co/models/meta-llama/Llama-3.2-3B-Instruct/v1/chat/completions'
+const HF_URL = 'https://router.huggingface.co/hf-inference/v1/chat/completions'
 
 export async function POST(req: NextRequest) {
-  const { message } = await req.json()
-  if (!message?.trim()) return NextResponse.json({ error: 'Empty message' }, { status: 400 })
-
-  const token = process.env.HF_TOKEN
-  if (!token) return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 })
-
   try {
+    const { message } = await req.json()
+    if (!message?.trim()) {
+      console.error('Chat error: empty message string')
+      return NextResponse.json({ error: 'Empty message' }, { status: 400 })
+    }
+
+    const token = process.env.HF_TOKEN
+    if (!token) {
+      console.error('Chat error: missing HF_TOKEN from environment variables.')
+      return NextResponse.json({ error: 'Server misconfiguration' }, { status: 500 })
+    }
+
+    console.log(`Sending request to Hugging Face with message: "${message.substring(0, 50)}..."`)
+
     const res = await fetch(HF_URL, {
       method: 'POST',
       headers: {
@@ -28,10 +35,13 @@ export async function POST(req: NextRequest) {
       }),
     })
 
+    console.log(`Received HF response. Status = ${res.status}`)
+
     if (!res.ok) {
-      const err = await res.text()
-      console.error('HF API error:', res.status, err)
-      if (res.status === 503 || err.includes('loading')) {
+      const errText = await res.text()
+      console.error('HF API returned non-OK status:', res.status, errText)
+      
+      if (res.status === 503 || errText.includes('loading')) {
         return NextResponse.json({ reply: 'The AI model is currently loading into memory. Please try again in about 20 seconds!' })
       }
       return NextResponse.json({ error: 'AI service unavailable' }, { status: 502 })
@@ -39,9 +49,11 @@ export async function POST(req: NextRequest) {
 
     const data = await res.json()
     const reply = data.choices?.[0]?.message?.content?.trim()
+    console.log(`Success! AI reply: "${reply?.substring(0, 50)}..."`)
+    
     return NextResponse.json({ reply: reply || 'No response generated.' })
   } catch (e: any) {
-    console.error('Chat route error:', e.message || e)
+    console.error('Chat API threw an unhandled exception:', e.message, e.stack)
     return NextResponse.json({ error: 'Internal error' }, { status: 500 })
   }
 }
