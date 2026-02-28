@@ -8,7 +8,10 @@ import { LiverIcon } from '@/components/MedicalIcons'
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL!
 
-const FIELDS = [
+type Option = { label: string; value: string }
+type Field = { key: string; label: string; unit?: string; placeholder?: string; options?: Option[] }
+
+const FIELDS: Field[] = [
   { key: 'Age', label: 'Age', unit: 'yrs', placeholder: 'Years' },
   { key: 'Total_Bilirubin', label: 'Total Bilirubin', unit: 'mg/dL', placeholder: '0.4–17.1' },
   { key: 'Direct_Bilirubin', label: 'Direct Bilirubin', unit: 'mg/dL', placeholder: '0.1–7.1' },
@@ -18,7 +21,7 @@ const FIELDS = [
   { key: 'Total_Protiens', label: 'Total Proteins', unit: 'g/dL', placeholder: '6.3–8.2' },
   { key: 'Albumin', label: 'Albumin', unit: 'g/dL', placeholder: '3.5–5.0' },
   { key: 'Albumin_and_Globulin_Ratio', label: 'A/G Ratio', unit: '', placeholder: '0.8–2.0' },
-  { key: 'Gender_Male', label: 'Gender (1=Male)', unit: '', placeholder: '0 or 1' },
+  { key: 'Gender_Male', label: 'Gender', unit: '', placeholder: '', options: [{ label: 'Male', value: '1' }, { label: 'Female', value: '0' }] },
 ]
 
 interface Result { prediction: number; probability: number; risk_level: string; model_version: string }
@@ -66,11 +69,24 @@ function Page() {
                   <div key={f.key}>
                     <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#52525b', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>{f.label}</label>
                     <div style={{ position: 'relative' }}>
-                      <input type="number" step="any" required value={form[f.key]} onChange={e => setForm({ ...form, [f.key]: e.target.value })} placeholder={f.placeholder}
-                        style={{ width: '100%', padding: '10px 14px', paddingRight: f.unit ? 56 : 14, borderRadius: 10, border: '1.5px solid #e4e4e7', background: '#fafafa', fontSize: 14, color: '#09090b', transition: 'all 0.15s' }}
-                        onFocus={e => { e.target.style.borderColor = '#0F9D9A'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(15,157,154,0.12)' }}
-                        onBlur={e => { e.target.style.borderColor = '#e4e4e7'; e.target.style.background = '#fafafa'; e.target.style.boxShadow = 'none' }} />
-                      {f.unit && <span style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 10, color: '#a1a1aa', fontWeight: 700 }}>{f.unit}</span>}
+                      {f.options ? (
+                        <select
+                          required value={form[f.key]}
+                          onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                          style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e4e4e7', background: '#fafafa', fontSize: 14, color: '#09090b', transition: 'all 0.15s', cursor: 'pointer', appearance: 'none' }}
+                          onFocus={e => { e.target.style.borderColor = '#0F9D9A'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(15,157,154,0.12)' }}
+                          onBlur={e => { e.target.style.borderColor = '#e4e4e7'; e.target.style.background = '#fafafa'; e.target.style.boxShadow = 'none' }}
+                        >
+                          <option value="">Select…</option>
+                          {f.options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                      ) : (
+                        <input type="number" step="any" required value={form[f.key]} onChange={e => setForm({ ...form, [f.key]: e.target.value })} placeholder={f.placeholder}
+                          style={{ width: '100%', padding: '10px 14px', paddingRight: f.unit ? 56 : 14, borderRadius: 10, border: '1.5px solid #e4e4e7', background: '#fafafa', fontSize: 14, color: '#09090b', transition: 'all 0.15s' }}
+                          onFocus={e => { e.target.style.borderColor = '#0F9D9A'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(15,157,154,0.12)' }}
+                          onBlur={e => { e.target.style.borderColor = '#e4e4e7'; e.target.style.background = '#fafafa'; e.target.style.boxShadow = 'none' }} />
+                      )}
+                      {f.unit && !f.options && <span style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 10, color: '#a1a1aa', fontWeight: 700 }}>{f.unit}</span>}
                     </div>
                   </div>
                 ))}

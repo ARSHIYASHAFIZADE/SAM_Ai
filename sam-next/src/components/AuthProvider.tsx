@@ -1,6 +1,6 @@
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL!
 
@@ -31,10 +31,11 @@ export const useAuth = () => useContext(Ctx)
 export function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, checked } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
-    if (checked && !isAuthenticated) router.replace('/login')
-  }, [checked, isAuthenticated, router])
+    if (checked && !isAuthenticated) router.replace(`/login?returnUrl=${encodeURIComponent(pathname)}`)
+  }, [checked, isAuthenticated, router, pathname])
 
   if (!checked) return null
   if (!isAuthenticated) return null

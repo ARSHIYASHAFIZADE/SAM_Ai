@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import { RequireAuth } from '@/components/AuthProvider'
+import { MicroscopeIcon } from '@/components/MedicalIcons'
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL!
 
@@ -69,7 +70,7 @@ function Page() {
       <Navbar />
       <div style={{ maxWidth: 1000, margin: '0 auto', padding: '48px 24px 80px' }}>
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 32 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 14, background: '#f0fdf4', border: '1px solid #86efac', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>🔬</div>
+          <div style={{ width: 48, height: 48, borderRadius: 14, background: '#f0fdf4', border: '1px solid #86efac', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><MicroscopeIcon size={24} color="#16a34a" strokeWidth={1.7} /></div>
           <div>
             <p style={{ fontSize: 12, color: '#0F9D9A', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>Oncology</p>
             <h1 style={{ fontSize: 26, fontWeight: 800, color: '#09090b', letterSpacing: '-0.5px' }}>Breast Cancer Screening</h1>

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import { RequireAuth } from '@/components/AuthProvider'
 import { ResultDisplay } from '../heart/page'
-import { GlucoseDropIcon } from '@/components/MedicalIcons'
+import { GlucoseDropIcon, StethoscopeIcon } from '@/components/MedicalIcons'
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL!
 
@@ -45,7 +45,7 @@ function Page() {
       <Navbar />
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px 80px' }}>
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 32 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 14, background: '#fdf4ff', border: '1px solid #d8b4fe', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>🩺</div>
+          <div style={{ width: 48, height: 48, borderRadius: 14, background: '#fdf4ff', border: '1px solid #d8b4fe', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><StethoscopeIcon size={24} color="#9333ea" strokeWidth={1.7} /></div>
           <div>
             <p style={{ fontSize: 12, color: '#0F9D9A', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>Endocrinology</p>
             <h1 style={{ fontSize: 26, fontWeight: 800, color: '#09090b', letterSpacing: '-0.5px' }}>Female Diabetes Risk Assessment</h1>

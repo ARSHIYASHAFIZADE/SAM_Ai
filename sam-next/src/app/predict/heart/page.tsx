@@ -3,19 +3,23 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import { RequireAuth } from '@/components/AuthProvider'
+import { HeartECGIcon } from '@/components/MedicalIcons'
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL!
 
-const FIELDS = [
+type Option = { label: string; value: string }
+type Field = { key: string; label: string; placeholder?: string; unit?: string; options?: Option[] }
+
+const FIELDS: Field[] = [
   { key: 'age', label: 'Age', placeholder: 'Years', unit: 'yrs' },
-  { key: 'sex', label: 'Sex', placeholder: '1 = Male, 0 = Female', unit: '' },
+  { key: 'sex', label: 'Sex', options: [{ label: 'Male', value: '1' }, { label: 'Female', value: '0' }] },
   { key: 'cp', label: 'Chest Pain Type', placeholder: '0–3', unit: '' },
   { key: 'trestbps', label: 'Resting BP', placeholder: 'mm Hg', unit: 'mmHg' },
   { key: 'chol', label: 'Cholesterol', placeholder: 'mg/dL', unit: 'mg/dL' },
-  { key: 'fbs', label: 'Fasting Blood Sugar >120', placeholder: '1 = Yes, 0 = No', unit: '' },
+  { key: 'fbs', label: 'Fasting Blood Sugar >120', options: [{ label: 'Yes (>120 mg/dL)', value: '1' }, { label: 'No', value: '0' }] },
   { key: 'restecg', label: 'Resting ECG', placeholder: '0–2', unit: '' },
   { key: 'thalach', label: 'Max Heart Rate', placeholder: 'bpm', unit: 'bpm' },
-  { key: 'exang', label: 'Exercise Angina', placeholder: '1 = Yes, 0 = No', unit: '' },
+  { key: 'exang', label: 'Exercise Angina', options: [{ label: 'Yes', value: '1' }, { label: 'No', value: '0' }] },
   { key: 'oldpeak', label: 'ST Depression', placeholder: '0.0–6.2', unit: '' },
   { key: 'slope', label: 'ST Slope', placeholder: '0–2', unit: '' },
   { key: 'ca', label: 'Major Vessels', placeholder: '0–4', unit: '' },
@@ -50,7 +54,7 @@ function Page() {
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '48px 24px 80px' }}>
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 8 }}>
-            <div style={{ width: 48, height: 48, borderRadius: 14, background: '#fef2f2', border: '1px solid #fca5a5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>🫀</div>
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: '#fef2f2', border: '1px solid #fca5a5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><HeartECGIcon size={24} color="#ef4444" strokeWidth={1.7} /></div>
             <div>
               <p style={{ fontSize: 12, color: '#0F9D9A', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>Cardiology</p>
               <h1 style={{ fontSize: 26, fontWeight: 800, color: '#09090b', letterSpacing: '-0.5px' }}>Heart Disease Risk Assessment</h1>
@@ -71,15 +75,28 @@ function Page() {
                   <div key={f.key}>
                     <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#52525b', marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.5 }}>{f.label}</label>
                     <div style={{ position: 'relative' }}>
-                      <input
-                        type="number" step="any" required value={form[f.key]}
-                        onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                        placeholder={f.placeholder}
-                        style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e4e4e7', background: '#fafafa', fontSize: 14, color: '#09090b', transition: 'all 0.15s', paddingRight: f.unit ? 52 : 14 }}
-                        onFocus={e => { e.target.style.borderColor = '#0F9D9A'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(15,157,154,0.12)' }}
-                        onBlur={e => { e.target.style.borderColor = '#e4e4e7'; e.target.style.background = '#fafafa'; e.target.style.boxShadow = 'none' }}
-                      />
-                      {f.unit && <span style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 11, color: '#a1a1aa', fontWeight: 600 }}>{f.unit}</span>}
+                      {f.options ? (
+                        <select
+                          required value={form[f.key]}
+                          onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                          style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e4e4e7', background: '#fafafa', fontSize: 14, color: '#09090b', transition: 'all 0.15s', cursor: 'pointer', appearance: 'none' }}
+                          onFocus={e => { e.target.style.borderColor = '#0F9D9A'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(15,157,154,0.12)' }}
+                          onBlur={e => { e.target.style.borderColor = '#e4e4e7'; e.target.style.background = '#fafafa'; e.target.style.boxShadow = 'none' }}
+                        >
+                          <option value="">Select…</option>
+                          {f.options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        </select>
+                      ) : (
+                        <input
+                          type="number" step="any" required value={form[f.key]}
+                          onChange={e => setForm({ ...form, [f.key]: e.target.value })}
+                          placeholder={f.placeholder}
+                          style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e4e4e7', background: '#fafafa', fontSize: 14, color: '#09090b', transition: 'all 0.15s', paddingRight: f.unit ? 52 : 14 }}
+                          onFocus={e => { e.target.style.borderColor = '#0F9D9A'; e.target.style.background = 'white'; e.target.style.boxShadow = '0 0 0 3px rgba(15,157,154,0.12)' }}
+                          onBlur={e => { e.target.style.borderColor = '#e4e4e7'; e.target.style.background = '#fafafa'; e.target.style.boxShadow = 'none' }}
+                        />
+                      )}
+                      {f.unit && !f.options && <span style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 11, color: '#a1a1aa', fontWeight: 600 }}>{f.unit}</span>}
                     </div>
                   </div>
                 ))}

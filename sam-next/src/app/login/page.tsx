@@ -25,7 +25,11 @@ export default function LoginPage() {
         credentials: 'include', body: JSON.stringify({ email, password }),
       })
       const data = await res.json()
-      if (res.ok) { login(); router.replace('/dashboard') }
+      if (res.ok) {
+        login()
+        const params = new URLSearchParams(window.location.search)
+        router.replace(params.get('returnUrl') || '/dashboard')
+      }
       else setError(data.error || 'Invalid credentials.')
     } catch { setError('Network error. Please try again.') }
     finally { setLoading(false) }
