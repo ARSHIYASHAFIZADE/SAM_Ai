@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const HF_URL = 'https://router.huggingface.co/hf-inference/v1/chat/completions'
 
+export const runtime = 'edge';
+
 export async function POST(req: NextRequest) {
   try {
     const { message } = await req.json()
