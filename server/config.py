@@ -31,5 +31,5 @@ class ApplicationConfig:
 
     SESSION_PERMANENT = False
     SESSION_USE_SIGNER = True
-    SESSION_COOKIE_SAMESITE = "Lax"
-    SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", "true").lower() == "true"
+    SESSION_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SECURE = True
