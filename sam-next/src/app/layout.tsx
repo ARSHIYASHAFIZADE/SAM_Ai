@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import { AuthProvider } from '@/components/AuthProvider'
 import ChatWidget from '@/components/ChatWidget'
 
-const inter = Inter({ subsets: ['latin'] })
+const font = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['300','400','500','600','700','800'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
   title: 'SAM AI — Early Disease Detection',
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-zinc-50 text-zinc-900 antialiased`}>
+      <body className={`${font.variable} antialiased`} style={{ background: '#0a0f1e', color: '#f1f5f9' }}>
         <AuthProvider>
           {children}
           <ChatWidget />
