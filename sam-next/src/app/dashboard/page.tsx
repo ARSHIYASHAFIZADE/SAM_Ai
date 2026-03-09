@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '@/components/Navbar'
 import { RequireAuth } from '@/components/AuthProvider'
-import { HeartECGIcon, LiverIcon, GlucoseDropIcon, SyringeIcon, MicroscopeIcon, ActivityIcon, ArrowRightIcon } from '@/components/MedicalIcons'
+import { HeartECGIcon, LiverIcon, GlucoseDropIcon, SyringeIcon, MicroscopeIcon, ActivityIcon, ArrowRightIcon, DownloadIcon, SparklesIcon, ShieldCheckIcon, TargetIcon } from '@/components/MedicalIcons'
 import { getAssessments, deleteAssessment, clearAssessments, type Assessment, type AssessmentType } from '@/lib/assessmentHistory'
 import RiskTrendChart from '@/components/RiskTrendChart'
 
@@ -97,6 +97,16 @@ function HistorySection({ assessments, setAssessments }: { assessments: Assessme
 
   const handleClear = () => { clearAssessments(); setAssessments([]) }
 
+  const handleDownload = () => {
+    const blob = new Blob([JSON.stringify(assessments, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'sam-ai-assessments.json'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <motion.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} style={{ marginBottom: 40 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
@@ -105,12 +115,18 @@ function HistorySection({ assessments, setAssessments }: { assessments: Assessme
           <p style={{ fontSize: 12, color: '#475569', marginTop: 3 }}>{assessments.length} {assessments.length === 1 ? 'record' : 'records'} stored locally</p>
         </div>
         {assessments.length > 0 && (
-          <button onClick={handleClear}
-            style={{ fontSize: 12, fontWeight: 600, color: '#475569', background: 'none', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 8, padding: '6px 12px', cursor: 'pointer', transition: 'all 0.15s' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.borderColor = 'rgba(248,113,113,0.30)' }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)' }}>
-            Clear all
-          </button>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            <button onClick={handleDownload}
+              style={{ fontSize: 12, fontWeight: 700, color: '#14b8a6', background: 'rgba(20,184,166,0.08)', border: '1px solid rgba(20,184,166,0.25)', borderRadius: 8, padding: '7px 12px', cursor: 'pointer', display: 'flex', gap: 6, alignItems: 'center' }}>
+              <DownloadIcon size={13} color="#14b8a6" strokeWidth={2} /> Export
+            </button>
+            <button onClick={handleClear}
+              style={{ fontSize: 12, fontWeight: 600, color: '#475569', background: 'none', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 8, padding: '6px 12px', cursor: 'pointer', transition: 'all 0.15s' }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.borderColor = 'rgba(248,113,113,0.30)' }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)' }}>
+              Clear all
+            </button>
+          </div>
         )}
       </div>
 
@@ -154,6 +170,11 @@ function DashboardContent() {
   const [assessments, setAssessments] = useState<Assessment[]>([])
   useEffect(() => { setAssessments(getAssessments()) }, [])
 
+  const latest = assessments[0]
+  const avgConfidence = assessments.length ? assessments.reduce((sum, a) => sum + a.probability, 0) / assessments.length : 0
+  const highRiskCount = assessments.filter(a => a.risk_level === 'High').length
+  const moduleCoverage = new Set(assessments.map(a => a.type)).size
+
   return (
     <div style={{ minHeight: '100vh', background: '#0a0f1e' }}>
       <Navbar />
@@ -167,10 +188,61 @@ function DashboardContent() {
               <h1 style={{ fontSize: 32, fontWeight: 800, color: '#f1f5f9', letterSpacing: '-0.8px' }}>AI Diagnostic Suite</h1>
               <p style={{ color: '#64748b', fontSize: 15, marginTop: 6 }}>Your personalised clinical assessment hub</p>
             </div>
-            <div style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 14, padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399', animation: 'pulse-dot 2s infinite' }} />
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#94a3b8' }}>5 modules active</span>
+            <div style={{ background: 'linear-gradient(135deg, rgba(20,184,166,0.14), rgba(96,165,250,0.14))', border: '1px solid rgba(20,184,166,0.30)', borderRadius: 14, padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#34d399', animation: 'pulse-dot 2s infinite', boxShadow: '0 0 12px rgba(52,211,153,0.7)' }} />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#e0f2fe' }}>5 modules live · Real-time inference</span>
             </div>
+          </div>
+        </motion.div>
+
+        {/* Summary cards */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 14, marginBottom: 28 }}>
+          <div style={{ background: '#111827', borderRadius: 16, border: '1px solid rgba(20,184,166,0.25)', padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(20,184,166,0.14)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <SparklesIcon size={18} color="#14b8a6" strokeWidth={2.2} />
+            </div>
+            <div>
+              <p style={{ fontSize: 12, color: '#64748b', marginBottom: 4 }}>Latest result</p>
+              <p style={{ fontSize: 15, fontWeight: 800, color: '#f1f5f9' }}>{latest ? `${latest.title} · ${latest.risk_level} Risk` : 'Awaiting first run'}</p>
+            </div>
+          </div>
+          <div style={{ background: '#111827', borderRadius: 16, border: '1px solid rgba(255,255,255,0.08)', padding: '16px 18px' }}>
+            <p style={{ fontSize: 12, color: '#64748b', marginBottom: 6 }}>Average confidence</p>
+            <p style={{ fontSize: 28, fontWeight: 800, color: '#e0f2fe' }}>{avgConfidence.toFixed(1)}%</p>
+            <p style={{ fontSize: 11, color: '#334155', marginTop: 2 }}>Across all saved assessments</p>
+          </div>
+          <div style={{ background: '#111827', borderRadius: 16, border: '1px solid rgba(248,113,113,0.18)', padding: '16px 18px' }}>
+            <p style={{ fontSize: 12, color: '#64748b', marginBottom: 6 }}>High-risk flags</p>
+            <p style={{ fontSize: 28, fontWeight: 800, color: '#f87171' }}>{highRiskCount}</p>
+            <p style={{ fontSize: 11, color: '#334155', marginTop: 2 }}>Past results tagged as High</p>
+          </div>
+          <div style={{ background: '#111827', borderRadius: 16, border: '1px solid rgba(96,165,250,0.20)', padding: '16px 18px' }}>
+            <p style={{ fontSize: 12, color: '#64748b', marginBottom: 6 }}>Module coverage</p>
+            <p style={{ fontSize: 28, fontWeight: 800, color: '#60a5fa' }}>{moduleCoverage}/5</p>
+            <p style={{ fontSize: 11, color: '#334155', marginTop: 2 }}>Unique specialties assessed</p>
+          </div>
+        </motion.div>
+
+        {/* Next best action */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }} style={{ background: 'linear-gradient(120deg, rgba(20,184,166,0.08), rgba(52,211,153,0.08))', border: '1px solid rgba(20,184,166,0.15)', borderRadius: 18, padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap', marginBottom: 28 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(20,184,166,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <TargetIcon size={20} color="#14b8a6" strokeWidth={2.2} />
+            </div>
+            <div>
+              <p style={{ fontSize: 12, color: '#14b8a6', fontWeight: 700, letterSpacing: 0.4 }}>Next Best Action</p>
+              <p style={{ fontSize: 15, fontWeight: 800, color: '#f1f5f9' }}>{latest ? `Run a follow-up ${latest.title} assessment to track changes.` : 'Run your first assessment to unlock trends and insights.'}</p>
+              <p style={{ fontSize: 12, color: '#475569', marginTop: 2 }}>Keep assessments consistent to compare risk trajectories.</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <Link href={latest ? moduleMap[latest.type].href : '/predict/heart'} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderRadius: 10, background: 'linear-gradient(135deg,#14b8a6,#0d9488)', color: 'white', fontWeight: 700, fontSize: 13, textDecoration: 'none', boxShadow: '0 10px 30px rgba(20,184,166,0.35)' }}>
+              Resume module
+              <ArrowRightIcon size={13} color="white" strokeWidth={2.4} />
+            </Link>
+            <Link href="/predict/heart" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.14)', color: '#cbd5e1', fontWeight: 700, fontSize: 13, textDecoration: 'none', background: '#111827' }}>
+              See all modules
+            </Link>
           </div>
         </motion.div>
 

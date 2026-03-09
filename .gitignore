@@ -26,3 +26,7 @@ Thumbs.db
 
 # Logs
 *.log
+venv311/
+venv313/
+saved_models/
+tmpwheels/

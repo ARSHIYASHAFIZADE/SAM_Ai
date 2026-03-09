@@ -21,8 +21,8 @@ gunicorn==23.0.0
 itsdangerous==2.2.0
 Jinja2==3.1.4
 MarkupSafe==2.1.5
-matplotlib==3.9.1
-numpy==2.0.1
+matplotlib==3.10.0
+numpy==1.26.4
 pandas==2.2.2
 pillow==10.4.0
 plotly==5.23.0
@@ -31,7 +31,7 @@ redis==5.0.8
 reportlab==4.2.2
 requests==2.32.3
 scikit-learn==1.5.1
-scipy==1.14.0
+scipy==1.12.0
 seaborn==0.13.2
 SQLAlchemy==2.0.32
 tenacity==9.0.0
