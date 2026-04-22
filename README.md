@@ -20,7 +20,9 @@
 
 <div align="center">
 
-[Download demo video](docs/demo.mp4) (6 MB, ~3 min) — landing page, register, all 5 diagnostic modules, AI chat, dashboard.
+![SAM AI demo — landing page, login, heart disease result, breast cancer radar chart, AI chat, dashboard](docs/demo.gif)
+
+<sub>Landing · Login · Heart Disease · Breast Cancer radar chart · AI Chat · Dashboard &nbsp;|&nbsp; <a href="docs/demo.mp4">Full demo MP4</a></sub>
 
 </div>
 
