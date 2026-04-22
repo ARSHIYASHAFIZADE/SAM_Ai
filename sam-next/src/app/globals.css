@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+:root {
+  --bg:            #0a0f1e;
+  --surface:       #111827;
+  --surface-2:     #1a2236;
+  --surface-3:     #0d1526;
+  --border:        rgba(255,255,255,0.07);
+  --border-strong: rgba(255,255,255,0.13);
+  --teal:          #14b8a6;
+  --teal-dark:     #0d9488;
+  --teal-glow:     rgba(20,184,166,0.18);
+  --teal-glow-sm:  rgba(20,184,166,0.10);
+  --text:          #f1f5f9;
+  --text-2:        #94a3b8;
+  --text-3:        #64748b;
+  --red:           #f87171;
+  --red-bg:        rgba(248,113,113,0.1);
+  --red-border:    rgba(248,113,113,0.25);
+  --amber:         #fbbf24;
+  --green:         #34d399;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { min-height: 100vh; background: var(--bg); color: var(--text); font-family: var(--font-sans, sans-serif); }
+
+::selection { background: rgba(20,184,166,0.25); color: var(--teal); }
+
+/* ── Typography ── */
+.label-upper {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--teal);
+}
+
+/* ── Glass surfaces ── */
+.glass {
+  background: rgba(17,24,39,0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-strong);
+}
+
+.glass-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+/* ── Gradient text ── */
+.text-teal-grad {
+  background: linear-gradient(135deg, #14b8a6 0%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Teal gradient button ── */
+.btn-teal {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+  color: #fff; border: none; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 20px var(--teal-glow);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-teal:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(20,184,166,0.30); }
+
+/* ── Blob background helpers ── */
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); pointer-events: none; z-index: 0;
+}
+
+/* ── Form inputs ── */
+input, textarea, select {
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  color-scheme: dark;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--teal) !important;
+  box-shadow: 0 0 0 3px var(--teal-glow-sm) !important;
+  background: var(--surface-2) !important;
+}
+
+/* ── Risk colours ── */
+.risk-low    { color: #34d399; }
+.risk-mod    { color: #fbbf24; }
+.risk-high   { color: #f87171; }
+
+/* ── Keyframes ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--teal-glow); }
+  50%       { box-shadow: 0 0 40px rgba(20,184,166,0.30); }
+}
+
+/* ── Print report styles ── */
+@media print {
+  body > * { visibility: hidden; }
+  .print-report, .print-report * { visibility: visible !important; }
+  .print-report {
+    position: fixed; top: 0; left: 0; width: 100%; padding: 40px 48px;
+    background: white !important; color: #09090b !important;
+    visibility: visible !important;
+  }
+  .print-report * { color: #09090b !important; }
+  .print-report .print-bar { background: #0F9D9A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-report .print-risk-low   { background: #dcfce7 !important; color: #166534 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-report .print-risk-mod   { background: #fef9c3 !important; color: #854d0e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-report .print-risk-high  { background: #fee2e2 !important; color: #991b1b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

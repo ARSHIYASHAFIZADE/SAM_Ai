@@ -1,0 +1,66 @@
+# ── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+venv311/
+venv313/
+env/
+.venv/
+
+# Environment files — use .env.example instead
+.env
+.env.local
+.env.*.local
+
+# Flask artifacts
+instance/
+flask_session/
+
+# SQLite database (generated at runtime)
+*.sqlite
+*.sqlite3
+*.db
+
+# Generated ML model bundles (trained on first request via train_models.py)
+# The saved_models/ directory is committed but its contents are generated locally
+saved_models/*.pkl
+*.pkl
+
+# Generated report artifacts
+*.pdf
+*.png
+
+# ── Node / Next.js ─────────────────────────────────────────────────────────
+node_modules/
+.next/
+out/
+.cache/
+npm-debug.log*
+
+# ── IDE / OS ────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# ── Test / CI ───────────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ── Logs ────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Misc ────────────────────────────────────────────────────────────────────
+tmpwheels/
+bin/
+obj/
